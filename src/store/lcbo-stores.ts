@@ -1,9 +1,9 @@
 
-interface Store {
+export interface Store {
 	id: string;
 	name: string;
-	latitude: string;
-	longitude: string;
+	latitude: number;
+	longitude: number;
 	city: string;
 }
 
@@ -14,6 +14,10 @@ class StoreCache {
 		if (!this.stores[store.id]){
 			this.stores[store.id] = store;
 		}
+	}
+
+	get(storeID: string){
+		return this.stores[storeID]
 	}
 }
 

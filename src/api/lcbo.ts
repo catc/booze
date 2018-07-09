@@ -1,5 +1,5 @@
 import lcbo from './lcbo-request';
-import stores from 'store/cache';
+import storesCache, { Store } from 'store/lcbo-stores';
 
 export async function search(term: string){
 	const url = '/products'
@@ -25,20 +25,37 @@ export async function getStoreInventories(productID: string){
 			per_page: 15
 		}
 	})
+
+	// TODO - start fetching stores immediately here
 }
 
-export async function getStore(storeID: string){
-	const url = `/stores/${storeID}`
-	const store = await lcbo.request(url)
-	// LEFT OFF HERE
+// fetch all stores by ids
+export async function getStores(storeIDs: string[]){
+	try {
+		const reqs = storeIDs.map(id => getStore(id))
+		return await Promise.all(reqs)
+	} catch (err){
+		console.error('Error fetching stores', err)
+	}
 }
 
-export async function getStores(stores: string[]){
-	const url = '/stores'
-	return await lcbo.request(url, {
-		params: {
-			// product_id: productID
-			per_page: 200
+async function getStore(storeID: string): Store {
+	// if already cached, use cache
+	let s = storesCache.get(storeID)
+	if (s){
+		return store;
+	}
+
+	// otherwise fetch
+	try {
+		const url = `/stores/${storeID}`
+		const resp = await lcbo.request(url)
+		if (resp.status !== 200){
+			throw new Error(resp)
 		}
-	})
+		storesCache.add(resp.result)
+		return resp.result;
+	} catch (err){
+		console.error('Error fetching store', err)
+	}
 }

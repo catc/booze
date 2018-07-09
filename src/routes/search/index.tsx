@@ -4,12 +4,10 @@ import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import P from 'prop-types';
 import { withRouter } from 'react-router'
-/*@inject(stores => ({
-	session: stores.sessionStore,
-}))*/
+
 import { search } from 'api/lcbo'
 import SearchResults from './results';
-// const wait = delay => new Promise(res => setTimeout(res, delay))
+// import { History } from 'node_modules/@types/history/index';
 
 const QUERY_KEY = 'q'
 
@@ -27,7 +25,7 @@ class Search extends Component<Props, {}> {
 	@action updateTerm = e => this.term = e.target.value
 	@action keyDown = e => e.key === 'Enter' ? this.submit() : null
 
-
+	unlisten: Function;
 	constructor(props: Props){
 		super(props)
 

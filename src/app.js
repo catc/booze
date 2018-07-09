@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Provider, observer } from 'mobx-react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
-import 'utils/map';
+import 'store/map';
 
 import 'styles/main.scss';
 

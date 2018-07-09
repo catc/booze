@@ -3,9 +3,10 @@ import React, { Component } from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import P from 'prop-types';
-import { withRouter } from 'react-router'
+import { withRouter, match } from 'react-router'
 
-import { getProduct, getStoreInventories } from 'api/lcbo'
+import { getProduct } from 'api/lcbo'
+import AvailabilityMap from './map'
 
 @observer
 class ProductView extends Component<Props, {}> {
@@ -17,19 +18,25 @@ class ProductView extends Component<Props, {}> {
 		this.fetchData();
 	}
 
+	@observable displayMap = false;
 	@observable result = {};
+
 	@action async fetchData(){
 		try {
+			// get product
 			const { result } = await getProduct(this.id)
 			this.result = result;
-			console.log(result);
 
-			const resp = await getStoreInventories(this.id)
-			console.log('resp is', resp);
+			this.displayAvailability() // FOR TESTINY
 		} catch (err){
 			console.error('Error fetching product', err)
 		}
 	}
+	
+	@action displayAvailability = () => {
+		this.displayMap = true;
+	}
+	
 
 	render(){
 		return (
@@ -45,6 +52,15 @@ class ProductView extends Component<Props, {}> {
 					:
 					null
 				}
+				<button onClick={this.displayAvailability}>Show availability</button>
+
+				{this.displayMap ?
+					<AvailabilityMap
+						productID={this.id}
+					/>
+					:
+					null
+				}
 			</div>
 		)
 	}
@@ -57,6 +73,6 @@ ProductView.propTypes = {
 }
 
 export interface Props {
-	// match: 
+	match: match
 }
 

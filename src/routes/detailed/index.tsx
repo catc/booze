@@ -5,8 +5,9 @@ import { observer, inject } from 'mobx-react';
 import P from 'prop-types';
 import { withRouter, match } from 'react-router'
 
-import { getProduct } from 'api/lcbo'
+import { getProduct, Product } from 'api/lcbo'
 import AvailabilityMap from './map'
+import Content from './content'
 
 @observer
 class ProductView extends Component<Props, {}> {
@@ -19,15 +20,15 @@ class ProductView extends Component<Props, {}> {
 	}
 
 	@observable displayMap = false;
-	@observable result = {};
+	@observable product: Product|{} = {};
 
 	@action async fetchData(){
 		try {
 			// get product
 			const { result } = await getProduct(this.id)
-			this.result = result;
+			this.product = result;
 
-			this.displayAvailability() // FOR TESTINY
+			// this.displayAvailability() // FOR TESTINY
 		} catch (err){
 			console.error('Error fetching product', err)
 		}
@@ -39,21 +40,19 @@ class ProductView extends Component<Props, {}> {
 	
 
 	render(){
+		if (!this.product.name){
+			return 'Loading...'
+		}
+
 		return (
 			<div>
-				{this.id}
-				{this.result.name ?
-					<div>
-						<h1>{this.result.name}</h1>
-						<div className="product__thumb">
-							<img src={this.result.image_thumb_url}/>
-						</div>
-					</div>
-					:
-					null
-				}
-				<button onClick={this.displayAvailability}>Show availability</button>
+				{/* main content */}
+				<Content
+					product={this.product}
+				/>
 
+				{/* availability map */}
+				<button onClick={this.displayAvailability}>Show availability</button>
 				{this.displayMap ?
 					<AvailabilityMap
 						productID={this.id}

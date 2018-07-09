@@ -1,5 +1,24 @@
 import lcbo from './lcbo-request';
 
+export interface Product {
+	id: number;
+	name: string;
+	origin: string;
+	description: string;
+	package: string;
+	producer_name: string;
+	alcohol_content: number;
+	is_dead: boolean;
+	is_discontinued: boolean;
+	price_in_cents: number;
+	regular_price_in_cents: number;
+	style: string;
+	image_url: string;
+	image_thumb_url: string;
+	tasting_note: string;
+	serving_suggestion: string;
+}
+
 export interface Store {
 	id: string;
 	name: string;
@@ -21,7 +40,7 @@ export async function search(term: string){
 	})
 }
 
-export async function getProduct(id: string){
+export async function getProduct(id: string): Promise<{ result: Product }>{
 	const url = `/products/${id}`
 	return await lcbo.request(url)
 }

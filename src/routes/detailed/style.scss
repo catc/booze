@@ -1,16 +1,16 @@
 
 .product {
 	&__thumb {
-		$size: 100px;
+		$size: 140px;
 		width: $size;
 		height: $size;
 		border: 1px solid #ddd;
 		padding: 4px;
 		border-radius: 2px;
-		img {
+		/* img {
 			width: 100%;
 			height: 100%;
 			object-fit: contain;
-		}
+		} */
 	}
 }

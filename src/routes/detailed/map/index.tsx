@@ -4,8 +4,7 @@ import { observer, inject } from 'mobx-react';
 import P from 'prop-types';
 
 import mapCache from 'store/map'
-import storesCache from 'store/lcbo-stores';
-import { getStoreInventories, getStores } from 'api/lcbo'
+import { getStoreInventories, Store } from 'api/lcbo'
 
 @observer
 export default class ProductAvailability extends Component<Props, {}> {
@@ -21,26 +20,19 @@ export default class ProductAvailability extends Component<Props, {}> {
     
     @action async fetchData(){
         // get stores that contain product
-        const storesWithInventory = await getStoreInventories(this.props.productID)
-
-        // fetch each store and cache
-        const storeIDs = storesWithInventory.result.map(s => s.store_id)
-        await getStores(storeIDs)
-        
-        // TOOD - if no stores offer it, display message
+        const stores: Store[] = await getStoreInventories(this.props.productID)
 
         // start up map
-        this.initMap(storeIDs)
+        this.initMap(stores)
     }
 
     map?: google.maps.Map;
     mapEl?: HTMLElement;
-    async initMap(storeIDs: number[]) {
+    async initMap(stores: Store[]) {
         this.map = await mapCache.initMap(this.mapEl)
 
-        storeIDs.map(id => {
-            const store = storesCache.get(id)
-
+        // TODO - improve this by only displaying markers within map viewport
+        stores.map(store => {
             const coords = {
                 lat: store.latitude,
                 lng: store.longitude
@@ -61,7 +53,7 @@ export default class ProductAvailability extends Component<Props, {}> {
     }
 
     @observable selectedStore = {};
-    @action selectStore(store){
+    @action selectStore(store: Store){
         this.selectedStore = store;
     }
 

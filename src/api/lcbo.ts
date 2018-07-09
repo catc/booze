@@ -1,5 +1,15 @@
 import lcbo from './lcbo-request';
-import storesCache, { Store } from 'store/lcbo-stores';
+
+export interface Store {
+	id: string;
+	name: string;
+	latitude: number;
+	longitude: number;
+	city: string;
+}
+
+const PAGE_SIZE = 100;
+// const PAGE_SIZE = 15; // FOR TESTING
 
 export async function search(term: string){
 	const url = '/products'
@@ -16,46 +26,38 @@ export async function getProduct(id: string){
 	return await lcbo.request(url)
 }
 
-// TODO - support pagination
 export async function getStoreInventories(productID: string){
-	const url = '/inventories'
-	return await lcbo.request(url, {
-		params: {
+	let stores: Store[] = []
+
+	// get first page
+	const resp = await req(1)
+
+	stores = stores.concat(resp.result)
+
+	// fetch remaining pages if there are more
+	if (resp.pager && resp.pager.next_page){
+		const pages = resp.pager.total_pages;
+
+		const reqs = []
+		for (let i=2; i < pages+1; i++){
+			reqs.push(req(i))
+		}
+
+		// combine
+		const remaining = await Promise.all(reqs)
+		stores = remaining.reduce((all, resp) => {
+			return all.concat(resp.result)
+		}, stores)
+	}
+	return stores;
+
+	async function req(page: number){
+		const url = '/stores';
+		const params = {
 			product_id: productID,
-			per_page: 15
+			per_page: PAGE_SIZE,
+			page: page
 		}
-	})
-
-	// TODO - start fetching stores immediately here
-}
-
-// fetch all stores by ids
-export async function getStores(storeIDs: string[]){
-	try {
-		const reqs = storeIDs.map(id => getStore(id))
-		return await Promise.all(reqs)
-	} catch (err){
-		console.error('Error fetching stores', err)
-	}
-}
-
-async function getStore(storeID: string): Store {
-	// if already cached, use cache
-	let s = storesCache.get(storeID)
-	if (s){
-		return store;
-	}
-
-	// otherwise fetch
-	try {
-		const url = `/stores/${storeID}`
-		const resp = await lcbo.request(url)
-		if (resp.status !== 200){
-			throw new Error(resp)
-		}
-		storesCache.add(resp.result)
-		return resp.result;
-	} catch (err){
-		console.error('Error fetching store', err)
+		return lcbo.request(url, { params })
 	}
 }

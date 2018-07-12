@@ -6,19 +6,12 @@ import P from 'prop-types';
 
 import { Product } from 'api/lcbo'
 import Image from 'components/common/image'
-/*@inject(stores => ({
-	session: stores.sessionStore,
-}))*/
+
 @observer
 export default class ProductContent extends Component<Props, {}> {
     constructor(props: Props) {
         super(props)
     }
-
-	/*@action.bound
-	async yourAction() {
-		// ...
-	}*/
 
     render() {
         const product = this.props.product

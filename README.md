@@ -1,42 +1,20 @@
-# React Starter Kit
-
-Supports:
-- react router
-- hot reloading (in dev)
-- typescript
-- es6/es7 support
-	- decorators
-	- class properties
-- mobx
-- scss
-- lazy loading components
-	- see `src/components/lazy-loader` for info
-- linting
-
-Perfect for single page applications that communicate with an API.
-
-## Installation + Setup
-
-To change config for development/builds - see `config/index.js`.
-
-### Setup
-- `nvm use 8.9.4`
-- `npm install`
-
-### Development
-- `npm run dev` and navigate to `localhost:7005`
-- to configure server proxy, see `devServerConfig` in `webpack.dev.js`
-
-### Production
-- `npm run build`
-
-### Debugging
-- `npm run analyze`
-	- will run build and display bundles
-	- see [bundle analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer) for more info
-
---------------
+# Booze
+Why recreate the LCBO website?
+1. it lacks an extremely useful feature; actually displaying store inventories on a map (instead it just provides a list of stores)
+2. add the option to save to favourites and create wishlists
+3. learn + play around with typescript
 
 ## TODO
-- update dependencies once `babel` and `extract-text-webpack-plugin` when they leave beta
-- add test support (jest)
+
+### Features
+- search pagination
+- save/wishlist
+- style
+	- add icons
+	- make responsive
+- 404 / catch all route
+
+### Other
+- verify build scripts work
+- backend to server everything - simple node server
+- dockerize

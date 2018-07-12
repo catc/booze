@@ -13,11 +13,7 @@ export default class ProductAvailability extends Component<Props, {}> {
 
         this.fetchData()
     }
-    
-    /* componentDidMount(){
-        return mapCache.initMap(this.mapEl) // for testing
-    } */
-    
+
     @action async fetchData(){
         // get stores that contain product
         const stores: Store[] = await getStoreInventories(this.props.productID)

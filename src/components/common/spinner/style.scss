@@ -1,0 +1,29 @@
+@import '~styles/common/variables';
+
+@keyframes spinner {
+    0% {
+        opacity: 1;
+        fill: $red1;
+    }
+    50% {
+        fill: $red2;
+    }
+    100% {
+        fill: $red1;
+        opacity: 1;
+        $spins: 360 * 2;
+        transform: rotate(#{$spins}deg);
+    }
+}
+
+.spinner {
+    display: block;
+    padding: 1em;
+    text-align: center;
+    svg {
+        animation: spinner 3s linear infinite forwards;
+        // $size: 36px;
+        // width: $size;
+        // height: $size;
+    }
+}

@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { Provider, observer } from 'mobx-react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, NavLink } from 'react-router-dom'
 import 'store/map';
 
 import 'styles/main.scss';
+import { Home, Info, Gift } from 'components/icons'
+import Spinner from 'components/common/spinner'
 
 // stores
 import ModalStore from 'store/modal';
@@ -12,8 +14,9 @@ import ModalStore from 'store/modal';
 import ModalWrapper from 'components/common/modal/modal-wrapper';
 
 // routes
-import Search from 'routes/search'
-import DetailedView from 'routes/detailed'
+import HomeRoute from 'routes/home'
+import ProductView from 'routes/detailed'
+import NotFound from 'routes/four-oh-four'
 
 // If you use React Router, make this component
 // render <Router> with your routes. Currently,
@@ -31,19 +34,31 @@ export default class App extends Component {
 					// other stores...
 				>
 					<Fragment>
+						<nav className="container app-nav">
+							<div>
+								<NavLink to="/" exact className="app-nav__link" activeClassName="state_active" >
+									<Home/>
+								</NavLink>
+								<NavLink to="/wishlist" className="app-nav__link" activeClassName="state_active" >
+									<Gift />
+								</NavLink>
+							</div>
+							<div>
+								<NavLink to="/about" className="app-nav__link" activeClassName="state_active" >
+									<Info />
+								</NavLink>
+							</div>
+						</nav>
 						<div>
-							<nav>
-								<Link to="/">Home</Link>
-								<Link to="/search">Search</Link>
-							</nav>
-
-							{/* can place routes here */}
 							<Switch>
-								<Route path="/search" component={Search}/>
-								<Route path="/product/:id" component={DetailedView}/>
-								{/* other routes */}
+								<Route path="/" exact component={HomeRoute}/>
+								<Route path="/p/:id" component={ProductView}/>
+								<Route component={NotFound}/>
 							</Switch>
 						</div>
+
+						{/* <Spinner/> */}
+						
 
 						{/* other stuff - ie: modal, growls, etc */}
 						<ModalWrapper/>

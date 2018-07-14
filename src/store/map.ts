@@ -1,3 +1,5 @@
+import { styles } from './map-const';
+
 interface Coords {
 	lat: number;
 	lng: number;
@@ -8,9 +10,8 @@ const TORONTO_COORDS = {
 	lng: -79.38318429999998
 }
 
-
 class Map {
-	_completeLoad = null;
+	_completeLoad: () => void;
 	_loaded = new Promise(res => {
 		this._completeLoad = res;
 	});
@@ -37,7 +38,8 @@ class Map {
 		return new google.maps.Map(el, {
 			center: coords,
 			zoom: 13,
-			mapTypeControl: false
+			mapTypeControl: false,
+			styles: styles
 		});
 	}
 

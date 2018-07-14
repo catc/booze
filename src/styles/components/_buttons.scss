@@ -1,0 +1,11 @@
+@import '~styles/common/variables';
+
+.button {
+    &.type_small {
+        svg {
+            $size: 18px;
+            width: $size;
+            height: $size;
+        }
+    }
+}

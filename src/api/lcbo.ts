@@ -1,4 +1,5 @@
 import lcbo from './lcbo-request';
+import random from 'lodash/random';
 
 export interface Product {
 	id: number;
@@ -27,7 +28,13 @@ export interface Store {
 	city: string;
 }
 
+// 
+const TOTAL_PRODUCT_ITEMS = 12852 // retrieved from api
+const RANDOM_PAGE_SIZE = 24
+const MAX_PRODUCT_PAGES = Math.floor(TOTAL_PRODUCT_ITEMS / RANDOM_PAGE_SIZE)
+
 const PAGE_SIZE = 100;
+
 // const PAGE_SIZE = 15; // FOR TESTING
 
 export async function search(term: string){
@@ -36,6 +43,16 @@ export async function search(term: string){
 		params: {
 			q: term,
 			per_page: 5
+		}
+	})
+}
+
+export async function randomProducts() {
+	const url = '/products'
+	return await lcbo.request(url, {
+		params: {
+			per_page: 12 * 2,
+			page: random(1, MAX_PRODUCT_PAGES)
 		}
 	})
 }

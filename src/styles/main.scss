@@ -3,6 +3,8 @@
 
 @import "components/other";
 @import "components/animations";
+@import "components/layout";
+@import "components/buttons";
 
 body {
 	// ...
@@ -10,4 +12,28 @@ body {
 
 .gm-style-cc {
 	display: none;
+}
+
+.app-nav {
+	padding: 6px 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	border-bottom: 2px solid $g7;
+	&__link {
+		display: inline-block;
+		padding: 12px;
+		svg {
+			fill: $g3;
+			transition: 0.15s ease-out;
+		}
+		&.state_active {
+			svg {
+				fill: $red2;
+			}
+		}
+		&:hover svg {
+			fill: $red1;
+		}
+	}
 }

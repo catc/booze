@@ -12,6 +12,8 @@ import { Link } from 'react-router-dom'
 export default class SearchResults extends Component<Props, {}> {
 	constructor(props: Props){
 		super(props)
+
+		// console.log('RESULTS STQRTED!')
 	}
 
 	/*@action.bound
@@ -25,7 +27,7 @@ export default class SearchResults extends Component<Props, {}> {
 				<ul>
 					{this.props.results.map(res => {
 						return <li key={res.id}>
-							<Link to={`/product/${res.id}`}>
+							<Link to={`/p/${res.id}`}>
 								{res.name}
 							</Link>
 						</li>

@@ -28,7 +28,7 @@ class ProductView extends Component<Props, {}> {
 			const { result } = await getProduct(this.id)
 			this.product = result;
 
-			// this.displayAvailability() // FOR TESTINY
+			this.displayAvailability() // FOR TESTING
 		} catch (err){
 			console.error('Error fetching product', err)
 		}

@@ -40,7 +40,13 @@
         "no-unused-vars": 1,
         "no-use-before-define": [1, "nofunc"],
         "global-require": 0,
-        "quotes": [1, "single", "avoid-escape"],
+        "quotes": [
+            1,
+            "single",
+            {
+                "allowTemplateLiterals": true
+            }
+        ],
         "no-mixed-spaces-and-tabs": 2,
         "no-trailing-spaces": [2, { "skipBlankLines": true }],
         "arrow-parens": [1, "as-needed"],

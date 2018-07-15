@@ -1,5 +1,49 @@
 @import '~styles/common/variables';
+@import '~styles/common/mixins';
 
 .shuffle {
-    
+    @include mq(max, $mq_big){
+        padding-left: $mq_small-padding;
+        padding-right: $mq_small-padding;
+    }
+    &__loading {
+        margin: 150px 0;
+    }
+
+    &__empty-results {
+        display: block;
+        text-align: center;
+        padding: 60px 0;
+        font-size: 1.6rem;
+        color: $g3;
+        button {
+            // color: $red2;
+            color: $g2;
+            padding: 0.5em;
+            width: 100%;
+            display: block;
+            text-align: center;
+        }
+    }
+
+    &__header {
+        margin-top: 40px;
+        margin-bottom: 1em;
+        h2 {
+            // color: $g2;
+            color: $g3;
+            // color: $red2;
+            font-size: 2.6rem;
+            font-weight: 400;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+    &__button {
+        margin-left: 0.5em;
+        vertical-align: middle;
+        svg {
+            // fill: $red1 !important;
+        }
+    }
 }

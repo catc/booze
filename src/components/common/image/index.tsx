@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { observable } from 'mobx';
 import { observer } from 'mobx-react';
 
+import { Image } from 'components/icons/index'
+
 @observer
 export default class ImageFade extends Component<Props, {}> {
     constructor(props: Props) {
@@ -34,6 +36,9 @@ export default class ImageFade extends Component<Props, {}> {
     @observable showImage = false;
 
     render() {
+        if (!this.props.src){
+            return <Image/>
+        }
         return (
             <img
                 className={`image-fade ${this.hasLoaded ? 'state_loaded' : ''} ${this.props.classes || ''}`}

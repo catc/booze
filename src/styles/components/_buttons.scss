@@ -1,6 +1,17 @@
 @import '~styles/common/variables';
 
 .button {
+    transition: 0.2s ease;
+    svg {
+        transition: 0.2s ease-out;
+    }
+    &.type_med {
+        svg {
+            $size: 24px;
+            width: $size;
+            height: $size;
+        }
+    }
     &.type_small {
         svg {
             $size: 18px;
@@ -8,4 +19,34 @@
             height: $size;
         }
     }
+    &.style_hover-light {
+        border-radius: 2px;
+        padding: 8px;
+        svg {
+            fill: $g2;
+        }
+        &:hover {
+            background: $g5;
+            svg {
+                fill: $g1;
+            }
+        }
+    }
+    &.style_hover-red {
+        border-radius: 2px;
+        padding: 8px;
+        transition: 0.2s ease;
+        svg {
+            fill: $g3;
+        }
+        &:hover {
+            background: $red1;
+            svg {
+                fill: white;
+            }
+        }
+    }
+    /* &.style_border-light {
+        border: 1px dashed lighten(#eaeaea, 3%);
+    } */
 }

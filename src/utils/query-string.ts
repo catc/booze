@@ -1,9 +1,9 @@
 
-const QUERY_KEY = 'q'
+export const SEARCH_QUERY_KEY = 'q'
 
-export function getQuery(qs: string): (string|null) {
+export function getQueryParam(qs: string, key: string): (string|null) {
     const params = new URLSearchParams(qs)
-    const query = params.get(QUERY_KEY)
+    const query = params.get(key)
     if (query) {
         return query.trim()
     }

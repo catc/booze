@@ -9,22 +9,19 @@ import { randomProducts } from 'api/lcbo'
 import Spinner from 'components/common/spinner/index'
 import { Shuffle } from 'components/icons/index';
 
-const wait = d => new Promise(res => setTimeout(res, d))
-/*@inject(stores => ({
-	session: stores.sessionStore,
-}))*/
 @observer
 export default class RandomShuffle extends Component<Props, {}> {
     constructor(props: Props) {
         super(props)
 
-        // this.fetch()
+        this.fetch()
     }
 
     @observable isLoading = true;
     @observable results = [];
 
-    @action async fetch() {
+    @action fetch = async () => {
+        this.isLoading = true;
         try {
             const { result } = await randomProducts()
             this.results = result
@@ -35,15 +32,33 @@ export default class RandomShuffle extends Component<Props, {}> {
         }
     }
 
+    refresh(){
+        window.location.reload()
+    }
+
     render() {
-        if (this.isLoading){
-            return <Spinner classes="shuffle__loading"/>
-        }
         return (
             <div className="shuffle">
-                <button className="button type_small"><Shuffle/></button>
 
-                <Results results={this.results} />
+                <div className="shuffle__header">
+                    <h2>Random Drinks</h2>
+                    <button
+                        onClick={this.fetch}
+                        className="button type_med style_hover-red shuffle__button"
+                    ><Shuffle/></button>
+                </div>
+
+                {this.isLoading ?
+                    <Spinner classes="shuffle__loading" />
+                    :
+                    this.results && this.results.length ?
+                        <Results results={this.results} />
+                        :
+                        <span className="shuffle__empty-results">
+                            No results found
+                            <button onClick={this.refresh}>Try refreshing the page</button>
+                        </span>
+                }
 			</div>
         )
     }

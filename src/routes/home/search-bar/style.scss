@@ -3,6 +3,10 @@
 
 .search-bar {
     position: relative;
+    @include mq(max, $mq_big){
+        padding-left: $mq_small-padding;
+        padding-right: $mq_small-padding;
+    }
     &__input {
         width: 100%;
         padding: 0.5em 0.8em;
@@ -36,6 +40,9 @@
         }
         &:hover svg {
             fill: $red1;
+        }
+        @include mq(max, $mq_big){
+            right: 4px + $mq_small-padding;           
         }
     }
 }

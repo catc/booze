@@ -24,3 +24,11 @@ $red2: #fd5c63;
 
 // ******** animation easings ********
 $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+
+// ******** media queries ********
+$mq_small: 480px;
+$mq_med: 720px;
+$mq_big: 960px;
+
+$mq_small-padding: 14px;

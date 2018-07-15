@@ -22,7 +22,8 @@ body {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	border-bottom: 2px solid $g7;
+	// border-bottom: 2px solid $g7;
+	border-bottom: 2px solid #f3f3f3;
 	&__link {
 		display: inline-block;
 		padding: 12px;

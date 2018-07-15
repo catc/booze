@@ -1,0 +1,14 @@
+@import '~styles/common/variables';
+
+.not-found {
+    text-align: center;
+    padding: 60px 0;
+    h1 {
+        font-size: 5rem;
+        color: $red2;
+    }
+    h2 {
+        color: $g3;
+        font-size: 2.8rem;
+    }
+}

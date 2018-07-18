@@ -8,6 +8,12 @@ import Spinner from 'components/common/spinner/index'
 import Results from '../results'
 import { search } from 'api/lcbo'
 
+/* 
+    TODO
+    - add pagination
+    - add bolded titles of search results
+    - add 'no results found' state
+*/
 
 @observer
 export default class SearchResults extends Component<Props, {}> {

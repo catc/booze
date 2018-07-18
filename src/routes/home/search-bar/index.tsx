@@ -3,14 +3,16 @@ import React, { Component } from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer } from 'mobx-react';
 import P from 'prop-types';
-import { withRouter } from 'react-router'
+import { withRouter, Router } from 'react-router'
 
 import { Search } from 'components/icons/index';
 import { getQueryParam, SEARCH_QUERY_KEY } from 'utils/query-string';
+import { History } from 'node_modules/@types/history/index';
 
 /* 
     component is solely responsible for setting
-    the url query param
+    the url query param and updating the current term
+    on parent
 */
 
 @observer
@@ -19,15 +21,22 @@ class SearchBar extends Component<Props, {}> {
     @action updateTerm = e => this.term = e.target.value
     @action keyDown = e => e.key === 'Enter' ? this.submit() : null
 
+    unlisten: () => void;
     constructor(props: Props) {
         super(props)
 
-        const term = getQueryParam(location.search, SEARCH_QUERY_KEY)
-        if (term){
-            this.term = term;
-        }
+        // listen to changes in query params
+        this.unlisten = props.history.listen(() => {
+            this.search()
+        })
+
+        // on startup, check for term in url
         this.search()
     };
+
+    componentWillUnmount() {
+        this.unlisten()
+    }
 
     @action submit = () => {
         const term = this.term.trim()
@@ -36,19 +45,17 @@ class SearchBar extends Component<Props, {}> {
         this.props.history.push({
             search: term ? `?${SEARCH_QUERY_KEY}=${term}` : ''
         })
-
-        this.search()
     };
 
     @action search = () => {
         // check for term
         const term = getQueryParam(location.search, SEARCH_QUERY_KEY)
 
-        if (term) {
-            this.props.setSearchTerm(term)
-        } else {
-            this.props.setSearchTerm(null)
-        }
+        // update state if page was refeshed
+        this.term = term || ''
+
+        // update on parent
+        this.props.setSearchTerm(term || null)
     }
 
     render() {
@@ -71,15 +78,16 @@ class SearchBar extends Component<Props, {}> {
             </div>
         )
     }
+
+    static propTypes = {
+
+    }
 }
 
 export default withRouter(SearchBar)
 
-SearchBar.propTypes = {
-
-}
-
 export interface Props {
     history: History;
-    location: Location
+    location: Location;
+    setSearchTerm: (term: string|null) => void
 }

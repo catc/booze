@@ -44,7 +44,7 @@ export default class RandomShuffle extends Component<Props, {}> {
                     <h2>Random Drinks</h2>
                     <button
                         onClick={this.fetch}
-                        className="button type_med style_hover-red shuffle__button"
+                        className="button type_med style_hover-light shuffle__button"
                     ><Shuffle/></button>
                 </div>
 

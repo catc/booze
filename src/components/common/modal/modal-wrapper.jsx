@@ -7,6 +7,7 @@ import { observable, action } from 'mobx';
 import { observer, inject, PropTypes as MPropTypes } from 'mobx-react';
 
 const PADDING = 40;
+const CLOSE_ANIMATION_DUR = 300;
 
 function selectAnimation(animation){
 	switch (animation){
@@ -17,6 +18,8 @@ function selectAnimation(animation){
 			return 'anim_scale-fade-in'
 	}
 }
+
+const wait = delay => new Promise(res => setTimeout(res, delay));
 
 // TODO - need observable?
 class ModalItem extends Component {
@@ -33,13 +36,27 @@ class ModalItem extends Component {
 		}, 0);
 	}
 
-	@action animateAndClose = () => {
+	@action animateAndClose = async () => {
+		if (this.beforeCloseModalFn){
+			this.beforeCloseModalFn()
+		}
 		this.content.style.opacity = 0
 		this.bg.style.opacity = 0
 
-		setTimeout(() => {
-			this.props.closeModal()
-		}, 300);
+		await wait(CLOSE_ANIMATION_DUR)
+		if (this.afterCloseModalFn){
+			this.afterCloseModalFn()
+		}
+		this.props.closeModal()
+	}
+
+	@action configureCloseModal = (opts = {}) => {
+		if (opts.beforeCloseModal){
+			this.beforeCloseModalFn = opts.beforeCloseModal
+		}
+		if (opts.afterCloseModal){
+			this.afterCloseModalFn = opts.afterCloseModal
+		}
 	}
 
 	// options bound in decorator
@@ -94,7 +111,8 @@ class ModalItem extends Component {
 	}
 
 	// options bound in decorator
-	@action showContent = options => {
+	@action showContent = (opts, override = {}) => {
+		const options = Object.assign(opts, override);
 		setTimeout(() => {
 			if (options.center){
 				const height = this.dialog.offsetHeight
@@ -138,6 +156,7 @@ class ModalItem extends Component {
 						<item.view
 							data={item.data}
 							closeModal={this.animateAndClose}
+							configureCloseModal={this.configureCloseModal}
 							setClasses={this.setClasses} // used by modal decorator only
 							showContent={this.showContent}
 							updateHeight={this.updateHeight}

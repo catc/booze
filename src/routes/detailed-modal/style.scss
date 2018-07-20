@@ -1,1 +1,15 @@
 @import '~styles/common/variables';
+
+.product-modal {
+    background: white;
+    &__close-btn {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 10px;
+        svg {
+            fill: white;
+            // $size: 24px;
+        }
+    }
+}

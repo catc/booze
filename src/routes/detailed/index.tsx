@@ -9,12 +9,25 @@ import { getProduct, Product } from 'api/lcbo'
 import AvailabilityMap from './map'
 import Content from './content'
 
+import get from 'lodash/get'
+import ProductModal from 'routes/detailed-modal/index'
+
+@inject(stores => ({
+	modalStore: stores.modalStore,
+}))
 @observer
 class ProductView extends Component<Props, {}> {
 	id: string;
 	constructor(props: Props){
 		super(props)
 
+		// console.log('props are', props)
+
+		const isModal = get(props, 'data.isModal')
+		if (!isModal){
+			this._testing = true;
+		}
+		return;
 		this.id = props.match.params.id
 		this.fetchData();
 	}
@@ -40,6 +53,10 @@ class ProductView extends Component<Props, {}> {
 	
 
 	render(){
+		if (this._testing){
+			return <ProductModal/>
+		}
+
 		if (!this.product.name){
 			return 'Loading...'
 		}

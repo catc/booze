@@ -6,8 +6,8 @@ import P from 'prop-types';
 
 import { getProduct, Product } from 'api/lcbo'
 import Spinner from 'components/common/spinner/index'
-import { wait } from 'utils/async'
-import { Alertoctagon } from 'components/icons/index'
+import { Alertoctagon, X } from 'components/icons/index'
+import ProductContent from './content/index'
 
 /* 
     responsible for accepting product id and
@@ -15,7 +15,7 @@ import { Alertoctagon } from 'components/icons/index'
 */
 
 @observer
-export default class ProductData extends Component<Props, {}> {
+export default class ProductView extends Component<Props, {}> {
     constructor(props: Props) {
         super(props)
 
@@ -49,17 +49,12 @@ export default class ProductData extends Component<Props, {}> {
         }
     }
 
-    /* 
-        TODO - LEFT OFF HERE
-        - clean up classes for regular vs modal
-            - for loading, error and regular
-        - create component for rendering content
-    */
-
     render() {
+        const typeClass = this.props.isModal ? 'type_modal' : 'type_full';
+
         if (this.loading){
             return (
-                <div className="container product-wrapper__common product-wrapper__loading">
+                <div className="container product-wrapper__loading">
                     <Spinner />
                 </div>
             )
@@ -67,7 +62,7 @@ export default class ProductData extends Component<Props, {}> {
 
         if (this.error){
             return (
-                <div className="container product-wrapper__common product-wrapper__error">
+                <div className={`container product-wrapper__error ${typeClass}`}>
                     <div className="product-wrapper__error-icon">
                         <Alertoctagon/>
                     </div>
@@ -77,19 +72,28 @@ export default class ProductData extends Component<Props, {}> {
         }
 
         return (
-            <div className={`product-wrapper container ${this.props.isModal ? 'type_modal' : ''}`}>
-                content = {this.product.name}
+            <div className={`container product-wrapper ${typeClass}`}>
+                {/* close button if modal */}
+                {this.props.isModal ?
+                    <button className="product-wrapper__close-modal" onClick={this.props.closeModal}><X/></button>
+                    :
+                    null
+                }
+
+                {/* content + map */}
+                <ProductContent product={this.product}/>
 			</div>
         )
     }
 }
 
-ProductData.propTypes = {
+ProductView.propTypes = {
 
 }
 
 export interface Props {
     productid: number;
     isModal: boolean;
-    hasLoadedCb: (hasError?: boolean) => void
+    hasLoadedCb: (hasError?: boolean) => void;
+    closeModal?: () => void
 }

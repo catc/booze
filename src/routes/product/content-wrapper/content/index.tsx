@@ -19,14 +19,14 @@ export default class ProductContent extends Component<Props, {}> {
             <div>
                 <div>
                     <h1>{product.name}</h1>
-                    <div className="product__thumb">
+                    {/* <div className="product__thumb">
                         <img src={product.image_url} />
-                    </div>
+                    </div> */}
                     <div className="product__thumb">
                         <Image src={product.image_url} />
                     </div>
                 </div>
-			</div>
+            </div>
         )
     }
 }

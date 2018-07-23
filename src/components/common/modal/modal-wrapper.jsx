@@ -87,7 +87,8 @@ class ModalItem extends Component {
 		if (options.fullScreen){
 			classes += ' type_full-screen'
 		}
-		if (options.center){
+
+		if (options.center || options.maxWidth){
 			classes += ' type_center'
 			if (options.constrainedHeight){
 				classes += ' type_constrain-height'
@@ -98,7 +99,8 @@ class ModalItem extends Component {
 
 		// dialog div styles
 		const dialogStyles = {}
-		if ((options.center || options.sidebar) && options.maxWidth){
+		// if ((options.center || options.sidebar) && options.maxWidth){
+		if (options.maxWidth){
 			dialogStyles.maxWidth = options.maxWidth
 		}
 

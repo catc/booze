@@ -4,18 +4,12 @@ import { observer, inject } from 'mobx-react';
 import P from 'prop-types';
 import { match } from 'node_modules/@types/react-router/index';
 
-import ProductView from 'routes/product/index'
+import ProductView from 'routes/product/content-wrapper/index'
 
-/* @observer
-export default class FullPageProduct extends Component<Props, {}> {
-    constructor(props: Props) {
-        super(props)
-    }
-
-    render() {
-        return <ProductView productid={this.props.match.params.id}/>
-    }
-} */
+/* 
+    responsible for getting route product id param and passing
+    to `ProductView` component which actually fetches content
+*/
 
 function FullPageProduct({ match }: Props) {
     return <ProductView productid={match.params.id} />
@@ -23,11 +17,10 @@ function FullPageProduct({ match }: Props) {
 
 export default observer(FullPageProduct)
 
-FullPageProduct.propTypes = {
-
-}
+// FullPageProduct.propTypes = {
+// // ...
+// }
 
 export interface Props {
     match: match;
 }
-

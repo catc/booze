@@ -7,7 +7,17 @@ import { withRouter, match } from 'react-router'
 import { History } from 'node_modules/@types/history/index';
 
 import modal from 'components/common/modal/index';
-import ProductView from 'routes/product/index'
+import ProductView from 'routes/product/content-wrapper/index'
+
+/* 
+    How this works:
+    - `ProductModalRoute`
+        - is the route that is navigated to on clicking a product modal
+    - `ProductModal`
+        - modal wrapper that passes product id to `ProductView`
+        data fetcher, and is responsible for showing modal content
+    - `ProductView` responsible for fetching data and rendering content
+*/
 
 interface ProductModal {
     configureCloseModal: (config: {
@@ -21,7 +31,6 @@ interface ProductModal {
 
 @modal({
     // center: true,
-    // additionalClasses: 'type_rounded',
     // autoShow: true
     // animation: 'fade-drop-in'
 })
@@ -56,11 +65,12 @@ class ProductModal extends Component<ProductModal, {}> {
         if (hasError){
             // if error, center modal
             opts.center = true;
-            opts.maxWidth = true
+            opts.maxWidth = 400
         } else {
             // if no error, align modal to top
             opts.center = false;
             opts.animation = 'fade-drop-in'
+            opts.maxWidth = 720
         }
 
         this.props.showContent(opts)
@@ -73,9 +83,8 @@ class ProductModal extends Component<ProductModal, {}> {
                 hasLoadedCb={this.displayContent}
                 productid={this.productid}
                 isModal={true}
+                closeModal={this.props.closeModal}
             />
-            // <div className="product-modal">
-			// </div>
         )
     }
 
@@ -92,8 +101,8 @@ const productModalWithRouter = withRouter(ProductModal)
 
 
 /* 
-    `ProductModalRoute` is solely responsible for initiating
-    the modal containing the product view
+    `ProductModalRoute` is solely responsible creating a modal
+    view with the component that contains the product, see above
 */
 export interface ProductModalRouteProps {
     history: History

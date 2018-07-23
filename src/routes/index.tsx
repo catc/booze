@@ -4,12 +4,9 @@ import { observer, inject } from 'mobx-react';
 import { BrowserRouter as Router, Route, Switch, NavLink } from 'react-router-dom'
 
 import HomeRoute from 'routes/home/index'
-// import ProductView from 'routes/detailed/index'
-// import ProductView from 'routes/product/index'
 import NotFound from 'routes/four-oh-four/index'
 import ProductModal from 'routes/product/product-modal/index'
 import ProductFullPage from 'routes/product/full-page/index'
-// import ProductModal from 'routes/detailed-modal/index'
 import { Location, History } from 'node_modules/@types/history/index';
 
 @observer
@@ -41,9 +38,6 @@ export default class Routes extends Component<Props, {}> {
 
     render() {
         const { location } = this.props;
-        /* const isModal = !!(
-            location.state && location.state.modal && this.previousLocation !== location
-        ); */ // not initial render
 
         return (
             <Fragment>

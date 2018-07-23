@@ -36,7 +36,14 @@ class Result extends Component<ResultProps, {}> {
 					</div>
 					<div className="result__content">
 						<span className="result__name">{result.name}</span>
-						<span className="result__origin">{result.origin}, <strong>{result.producer_name}</strong></span>
+						<span className="result__origin">
+							{result.origin}
+							{result.producer_name ?
+								<strong>, {result.producer_name}</strong>
+								:
+								null
+							}
+						</span>
 						<div className="result__price-wrapper">
 							<span className="result__price">{price(result.price_in_cents)}</span>
 							<span className="result__package">{result.package}</span>

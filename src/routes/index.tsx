@@ -4,9 +4,13 @@ import { observer, inject } from 'mobx-react';
 import { BrowserRouter as Router, Route, Switch, NavLink } from 'react-router-dom'
 
 import HomeRoute from 'routes/home/index'
-import ProductView from 'routes/detailed/index'
+// import ProductView from 'routes/detailed/index'
+// import ProductView from 'routes/product/index'
 import NotFound from 'routes/four-oh-four/index'
-import ProductModal from 'routes/detailed-modal/index'
+import ProductModal from 'routes/product/product-modal/index'
+import ProductFullPage from 'routes/product/full-page/index'
+// import ProductModal from 'routes/detailed-modal/index'
+import { Location, History } from 'node_modules/@types/history/index';
 
 @observer
 export default class Routes extends Component<Props, {}> {
@@ -16,7 +20,7 @@ export default class Routes extends Component<Props, {}> {
 
     previousLocation = this.props.location;
 
-    componentWillUpdate(nextProps) {
+    componentWillUpdate(nextProps: Props) {
         const { location } = this.props;
         // set previousLocation if props.location is not modal
         if (
@@ -27,24 +31,30 @@ export default class Routes extends Component<Props, {}> {
         }
     }
 
+    @computed get isModal(){
+        const { location } = this.props;
+        return !!(location.state
+            && location.state.modal
+            && this.previousLocation !== location
+        )
+    }
+
     render() {
         const { location } = this.props;
-        const isModal = !!(
-            location.state &&
-            location.state.modal &&
-            this.previousLocation !== location
-        ); // not initial render
+        /* const isModal = !!(
+            location.state && location.state.modal && this.previousLocation !== location
+        ); */ // not initial render
 
         return (
             <Fragment>
-                <Switch location={isModal ? this.previousLocation : location}>
+                <Switch location={this.isModal ? this.previousLocation : location}>
                     <Route path="/" exact component={HomeRoute} />
-                    <Route path="/p/:id" component={ProductView} />
+                    <Route path="/p/:id" component={ProductFullPage} />
                     <Route component={NotFound} />
                 </Switch>
 
                 {/* product modal view */}
-                {isModal ? <Route path="/p/:id" component={ProductModal} /> : null}
+                {this.isModal ? <Route path="/p/:id" component={ProductModal} /> : null}
             </Fragment>
         )
     }
@@ -55,5 +65,6 @@ Routes.propTypes = {
 }
 
 export interface Props {
-    someProp: string;
+    location: Location;
+    history: History
 }

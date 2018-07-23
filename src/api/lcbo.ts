@@ -57,7 +57,7 @@ export async function randomProducts() {
 	})
 }
 
-export async function getProduct(id: string): Promise<{ result: Product }>{
+export async function getProduct(id: number): Promise<{ result: Product }>{
 	const url = `/products/${id}`
 	return await lcbo.request(url)
 }

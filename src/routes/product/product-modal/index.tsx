@@ -6,18 +6,8 @@ import P from 'prop-types';
 import { withRouter, match } from 'react-router'
 import { History } from 'node_modules/@types/history/index';
 
-// import ProductView from 'routes/detailed/index'
 import modal from 'components/common/modal/index';
 import ProductView from 'routes/product/index'
-import { X } from 'components/icons/index';
-
-/* 
-    TODO
-    - create a wrapper that fetches content
-    - create a new component that just takes an id and fetches content
-        - maybe calls a callback when it's done fetching content and rendering?
-    - find a way to pass a custom close function to modal wrapper
-*/
 
 interface ProductModal {
     configureCloseModal: (config: {
@@ -30,16 +20,17 @@ interface ProductModal {
 }
 
 @modal({
-    center: true,
+    // center: true,
     // additionalClasses: 'type_rounded',
     // autoShow: true
+    // animation: 'fade-drop-in'
 })
 @inject(stores => ({
     modalStore: stores.modalStore,
 }))
 @observer
 class ProductModal extends Component<ProductModal, {}> {
-    productid?: number;
+    productid: number;
     constructor(props: ProductModal){
         super(props)
 
@@ -60,25 +51,31 @@ class ProductModal extends Component<ProductModal, {}> {
         }
     }
     
-    displayContent = () => {
-        console.log('content is done loading, would show now')
-        this.props.showContent({
-            center: false
-        })
+    displayContent = (hasError: boolean = false) => {
+        const opts = {}
+        if (hasError){
+            // if error, center modal
+            opts.center = true;
+            opts.maxWidth = true
+        } else {
+            // if no error, align modal to top
+            opts.center = false;
+            opts.animation = 'fade-drop-in'
+        }
+
+        this.props.showContent(opts)
     }
 
     render(){
         const data = this.props.data
         return (
-            <div className="product-modal">
-
-                {/* <button className="product-modal__close-btn" onClick={this.props.closeModal}><X/></button> */}
-
-                <ProductView
-                    hasLoaded={this.displayContent}
-                    productid={this.productid}
-                />
-			</div>
+            <ProductView
+                hasLoadedCb={this.displayContent}
+                productid={this.productid}
+                isModal={true}
+            />
+            // <div className="product-modal">
+			// </div>
         )
     }
 

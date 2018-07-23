@@ -10,7 +10,17 @@ import AvailabilityMap from './map'
 import Content from './content'
 
 import get from 'lodash/get'
-import ProductModal from 'routes/detailed-modal/index'
+import ProductModal from 'routes/product/product-modal/index'
+
+/* 
+
+
+	TODO
+	- deprecate and use 'product' instead
+
+
+
+*/
 
 @inject(stores => ({
 	modalStore: stores.modalStore,
@@ -23,13 +33,13 @@ class ProductView extends Component<Props, {}> {
 
 		// console.log('props are', props)
 
-		const isModal = get(props, 'data.isModal')
+		/* const isModal = get(props, 'data.isModal')
 		if (!isModal){
 			this._testing = true;
 		}
 		return;
 		this.id = props.match.params.id
-		this.fetchData();
+		this.fetchData(); */
 	}
 
 	@observable displayMap = false;

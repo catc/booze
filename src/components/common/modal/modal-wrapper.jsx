@@ -13,6 +13,8 @@ function selectAnimation(animation){
 	switch (animation){
 		case 'fade-in':
 			return 'anim_fade-in'
+		case 'fade-drop-in':
+			return 'anim_fade-drop-in'
 		case 'scale-fade-in':
 		default:
 			return 'anim_scale-fade-in'

@@ -71,7 +71,7 @@ export default class ProductView extends Component<Props, {}> {
 
         if (this.loading){
             return (
-                <div className="container product-wrapper__loading">
+                <div className={`container product-wrapper__loading ${typeClass}`}>
                     <Spinner />
                 </div>
             )

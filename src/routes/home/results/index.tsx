@@ -34,10 +34,7 @@ class Result extends Component<ResultProps, {}> {
 		return (
 			<li className="result">
 				<Link to={{
-					// search: `?p=${result.id}`
 					search: `${this.qs}&${PRODUCT_QUERY_KEY}=${result.id}`
-					// pathname: `/p/${result.id}`,
-					// state: {modal: true}
 				}}>
 					<div className="result__img">
 						<Image src={result.image_thumb_url} />
@@ -67,15 +64,12 @@ class Result extends Component<ResultProps, {}> {
 	}
 }
 
+// TODO - convert to stateless
 @inject(stores => ({
 	wishlist: stores.wishlist,
 }))
 @observer
 class SearchResults extends Component<Props, {}> {
-	// const currentQuery = ''
-	/* @computed get currentQS(){
-		return location.search
-	} */
 	render() {
 		return (
 			<ul className="results">

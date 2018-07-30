@@ -34,61 +34,23 @@ export default class Routes extends Component<Props, {}> {
         this.initialLoad = false;
     }
 
-    componentWillUpdate(nextProps: Props) {
-        const { location } = this.props;
-
-        // console.log('updated')
-        // set previousLocation if props.location is not modal
-        /* if (
-            nextProps.history.action !== "POP" &&
-            (!location.state || !location.state.modal)
-        ) {
-            this.previousLocation = this.props.location;
-        } */
-        /* if (location.search){
-            console.log('locatino.search', location.search)
-        } */
-        // console.log('gonna update', nextProps)
-        /* if (nextPRops){
-
-        } */
-    }
-
-    /* @computed get isModal(){
-        const { location } = this.props;
-        return !!(location.state
-            && location.state.modal
-            && this.previousLocation !== location
-        )
-    } */
-
 
     @computed get productQS(): string | null {
         return getQueryParam(this.props.location.search, PRODUCT_QUERY_KEY);
     }
 
     render() {
-        const { location } = this.props;
-
-        // console.log(
-        //     'is it modal?', this.isModal,
-        //     'and also: ', this.isModal ? this.previousLocation : location
-        // )
         return (
             <Fragment>
-                {/* <Switch location={this.isModal ? this.previousLocation : location}> */}
-                <Switch location={location}>
+                <Switch>
                     <Route path="/" exact component={HomeRoute} />
                     <Route path="/p/:id" component={ProductFullPage} />
                     <Route component={NotFound} />
                 </Switch>
 
                 {/* product modal view */}
-                {/* {this.isModal ? <Route path="/p/:id" component={ProductModal} /> : null} */}
                 {!this.initialLoad && this.productQS ?
-                    <ProductModal
-                        productid={this.productQS}
-                    />
+                    <ProductModal productid={this.productQS}/>
                     :
                     null
                 }

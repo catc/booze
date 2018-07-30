@@ -37,6 +37,9 @@
         // only has full page classes
         padding: 1em;
         margin: 13vh auto;
+        &.type_modal {
+            display: none;
+        }
     }
     
 

@@ -39,8 +39,6 @@ export default class RecentlyViewed extends Component<Props, {}> {
                                 className="recently-viewed__product"
                             >
                                 <Link to={{
-                                    // pathname: `/p/${p.id}`,
-                                    // state: { modal: true }
                                     search: `${this.qs}&${PRODUCT_QUERY_KEY}=${p.id}`
                                 }}>
                                     <img src={p.image_thumb_url} alt=""/>

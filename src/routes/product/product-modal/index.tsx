@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer } from 'mobx-react';
 import P from 'prop-types';
-import { withRouter, match } from 'react-router'
+import { withRouter } from 'react-router'
 import { History } from 'node_modules/@types/history/index';
 
 import ProductView from 'routes/product/content-wrapper/index'
@@ -16,7 +16,6 @@ import { getNonProductQS } from 'utils/query-string';
 
 export interface ProductModalRouteProps {
     history: History
-    match: match;
     closeModal: () => void;
 }
 
@@ -52,32 +51,11 @@ class ProductModalRoute extends Component<ProductModalRouteProps, {}> {
         this.props.showContent(opts)
     }
 
-    /* componentDidUpdate(prevProps){
-        const prevID = prevProps.match.params.id
-        const newID = this.props.match.params.id;
-        if (prevID !== newID){
-            // this.changeProduct()
-        }
-    }
-
-    @observable _disable = false;
-    async changeProduct(){
-        console.log('changing')
-        this._disable = true;
-        await wait(0)
-        this._disable = false;
-    } */
-
     render(){
-        /* if (this._disable){
-            console.log('should see nothing')
-            return null;
-        } */
         return (
             <ProductView
                 key={this.props.location.search}
                 hasLoadedCb={this.displayContent}
-                // productid={this.props.match.params.id}
                 productid={this.props.productid}
                 isModal={true}
                 closeModal={this.props.closeModal}

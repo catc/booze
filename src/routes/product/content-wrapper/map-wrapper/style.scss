@@ -1,0 +1,87 @@
+@import '~styles/common/variables';
+@import '~styles/common/mixins';
+
+.map-wrapper {
+    margin-top: 3em;
+    margin-bottom: 2em;
+
+    $button-height: 60px;
+    &__check-button {
+        display: block;
+        width: 100%;
+        height: $button-height;
+        transition: 0.15s ease;
+        
+        font-weight: bold;
+        font-size: 1.5rem;
+        // border: 1px solid $red2;
+        // color: $red2;
+        // border: 2px solid $g5;
+        border: 1px solid #d9d9d9;
+        color: lighten($g3, 5%);
+        color: darken($g4, 5%);
+        border-radius: 2px;
+        // background: $g6;
+        &:hover {
+            // color: $red2;
+            border-color: $red2;
+            background: $red2;
+            color: white;
+        }
+    }
+
+    &__error {
+        $col: rgba($red1, 0.3);
+        $col: $g6;
+        border-top: 1px dashed $col;
+        border-bottom: 1px dashed $col;
+        width: 100%;
+    }
+
+    &__searching {
+        height: $button-height;
+        width: 100%;
+        // background: rgba($red2, 0.12);
+        svg {
+            margin-top: 4px;
+        }
+    }
+
+    &__empty {
+        text-align: center;
+        height: $button-height;
+        width: 100%;
+        padding-top: 19px;
+        color: $g2;
+        color: $red2;
+        font-weight: bold;
+        font-size: 1.5rem;
+        animation: fadeIn 0.3s ease-out;
+    }
+    
+}
+
+.map-animation {
+    &__wrapper {
+        overflow: hidden;
+        width: 100%;
+        position: relative;
+    }
+    &-enter {
+        position: absolute;
+        opacity: 0;
+        transition: 0.3s ease-out;
+    }
+    &-enter-active {
+        position: absolute;
+        opacity: 1;
+    }
+    &-exit {
+        transition: 0.2s ease-out;
+        z-index: 5;
+    }
+    &-exit-active {
+        position: absolute;
+        opacity: 0;
+    }
+}

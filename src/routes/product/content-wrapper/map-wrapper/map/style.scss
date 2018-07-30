@@ -1,0 +1,145 @@
+@import '~styles/common/variables';
+@import '~styles/common/mixins';
+
+.map-content {
+    width: 100%;
+    &__map-wrapper {
+        border: 1px dashed $g6;
+        height: 440px;
+        position: relative;
+        border-radius: 2px;
+        overflow: hidden;
+        padding: 4px;
+        background: white;
+    }
+    &__map {
+        width: 100%;
+        height: 100%;
+    }
+    &__map-icon {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        svg {
+            $size: 36px;
+            width: $size;
+            height: $size;
+            fill: $red1;
+        }
+    }
+
+    &__toggle-store-button {
+        padding: 13px;
+        position: absolute;
+        $margin: 9px;
+        top: $margin;
+        left: $margin;
+        z-index: 2;
+        border-radius: 99px;
+        box-shadow:
+            0 1px 3px rgba(0,0,0,0.16),
+            0 1px 2px rgba(0,0,0,0.28);;
+        // @include shadow(1);
+        transition: 0.2s ease-out;
+        transform-origin: center;
+        opacity: 0;
+        animation: fadeIn 0.45s 1s ease-out forwards;
+        svg {
+            $size: 18px;
+            width: $size;
+            height: $size;
+            top: 1px;
+            position: relative;
+            fill: $g2;
+        }
+        &:hover {
+            transform: scale(1.06);
+        }
+
+        background: white;
+        &.state_active {
+            background: $red2;
+            svg {
+                fill: white;
+
+            }
+        }
+    }
+}
+
+.stores {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: white;
+    height: 100%;
+    width: 250px;
+    animation: slideRightFull 0.3s $ease-out-quad;
+    box-shadow: -2px 0 3px 0px rgba(black, 0.2);
+    $search-height: 55px;
+    &__search-wrapper {
+        display: block;
+        padding: 9px;
+        height: $search-height;
+    }
+    &__search {
+        width: 100%;
+        padding: 5px 8px;
+        border-radius: 2px;
+        font-size: 1.6rem;
+        border: 1px solid $g6;
+        background: white;
+    }
+    &__list {
+        overflow-y: auto;
+        height: calc(100% - #{$search-height});
+        position: relative;
+    }
+}
+
+.store {
+    padding: 8px 1em 8px;
+    position: relative;
+    cursor: pointer;
+    &:hover {
+        background: rgba($g6, 0.3);
+    }
+    &:after {
+        content: "";
+        display: block;
+        width: 90%;
+        border-bottom: 1px dashed $g6;
+        position: absolute;
+        top: 0;
+        // margin-top: 5px;
+    }
+    &.state_active {
+        background: rgba($red1, 0.09);
+    }
+    &__name, &__city, &__quantity, &__address, &__telephone {
+        display: block;
+    }
+    &__name {
+        font-weight: bold;
+        color: $g2;
+    }
+    &__city {
+        margin-top: -1px;
+    }
+    &__quantity {
+        text-transform: uppercase;
+        font-size: 1.2rem;
+        color: $g2;
+    }
+    &__additional {
+        margin-top: 7px;
+    }
+    &__address {
+        font-size: 1.3rem;
+    }
+    &__telephone {
+        // ...
+    }
+}

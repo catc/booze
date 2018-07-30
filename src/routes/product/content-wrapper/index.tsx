@@ -6,14 +6,19 @@ import P from 'prop-types';
 
 import { getProduct, Product } from 'api/lcbo'
 import Spinner from 'components/common/spinner/index'
-import { Alertoctagon, X } from 'components/icons/index'
+import { X } from 'components/icons/index'
 import ProductContent from './content/index'
-
+import MapWrapper from './map-wrapper/index'
+import RecentlyViewed from './recently-viewed/index'
+import ErrorMsg from 'components/common/error/index'
 /* 
     responsible for accepting product id and
     rendering either error view or product view
 */
 
+@inject(stores => ({
+    recent: stores.recentlyViewed,
+}))
 @observer
 export default class ProductView extends Component<Props, {}> {
     constructor(props: Props) {
@@ -35,6 +40,15 @@ export default class ProductView extends Component<Props, {}> {
             const { result } = await getProduct(id)
             this.product = result;
             this.doneLoading()
+
+            // add to 'recently viewed' history
+            this.props.recent.add({
+                id: result.id,
+                name: result.name,
+                image_thumb_url: result.image_thumb_url,
+                price_in_cents: result.price_in_cents,
+                package: result.package,
+            })
         } catch (err) {
             console.error('Error fetching product', err)
             this.doneLoading(true)
@@ -44,6 +58,9 @@ export default class ProductView extends Component<Props, {}> {
     doneLoading(hasError: boolean = false){
         this.loading = false;
         this.error = hasError;
+
+        // this only applies to modal
+        // once content is loaded, show the content
         if (this.props.hasLoadedCb){
             this.props.hasLoadedCb(hasError)
         }
@@ -62,12 +79,9 @@ export default class ProductView extends Component<Props, {}> {
 
         if (this.error){
             return (
-                <div className={`container product-wrapper__error ${typeClass}`}>
-                    <div className="product-wrapper__error-icon">
-                        <Alertoctagon/>
-                    </div>
-                    <span>There was an error loading this product</span>
-                </div>
+                <ErrorMsg
+                    className={`product-wrapper__error ${typeClass}`}
+                >There was an error loading this product</ErrorMsg>
             )
         }
 
@@ -82,6 +96,8 @@ export default class ProductView extends Component<Props, {}> {
 
                 {/* content + map */}
                 <ProductContent product={this.product}/>
+                <MapWrapper product={this.product}/>
+                <RecentlyViewed/>
 			</div>
         )
     }

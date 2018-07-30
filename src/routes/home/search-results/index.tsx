@@ -5,7 +5,7 @@ import { observer, inject } from 'mobx-react';
 import P from 'prop-types';
 
 import Spinner from 'components/common/spinner/index'
-import Results from '../results'
+import Results from '../results/index'
 import { search } from 'api/lcbo'
 
 /* 

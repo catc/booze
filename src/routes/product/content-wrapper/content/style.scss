@@ -1,0 +1,179 @@
+@import '~styles/common/variables';
+@import '~styles/common/mixins';
+
+.product {
+    max-width: $mq_desktop_min;
+    padding-top: 1em;
+
+    $img-width: 280px;
+    &__image {
+        $padding: 4px;
+        $border: 1px;
+        $aspect: 4 / 3;
+        // width: 300px;
+        height: $img-width * $aspect;
+        border: $border solid $g6;
+        padding: $padding;
+        border-radius: 2px;
+        background: white;
+        display: inline-block;
+        &.state_svg {
+            display: inline-flex;
+            justify-content: center;
+        }
+        svg {
+            $size: 36px;
+            width: $size;
+            height: $size;
+            fill: $g4;
+            align-self: center;
+            margin-top: -$size / 2;
+        }
+        @include desktop {
+            width: $img-width;
+        }
+        // TODO 
+        @include mobile {
+            width: 100%;
+            text-align: center;
+            height: $img-width * $aspect + ($border + $padding) * 2;
+            img {
+                display: inline-block;
+                width: 300px;
+            }
+        }
+    }
+
+    &__content {
+        vertical-align: top;
+        @include desktop {
+            display: inline-block;
+            width: calc(100% - #{$img-width});
+            padding-left: 1.5em;
+        }
+    }
+    &__name, &__origin {
+        &.type_mobile {
+            @include desktop {
+                display: none;
+            }
+        }
+        &.type_desktop {
+            @include mobile {
+                display: none;    
+            }
+        }        
+    }
+    &__name {
+        font-weight: 400;
+        font-size: 2.6rem;
+        line-height: 1.35;
+    }
+    &__origin {
+        display: block;
+        font-size: 1.3rem;
+        color: lighten($g2, 5%);
+        margin-top: 2px;
+        strong {
+            font-weight: normal;
+            font-style: italic;
+        }
+        &.type_mobile {
+            margin-bottom: 14px;
+        }
+    }
+    &__description {
+        font-size: 1.6rem;
+        color: $g2;
+        line-height: 1.55;
+        @include desktop {
+            padding-top: 1em;
+            border-top: 1px dashed $g6;
+        }
+    }
+    &__details {
+        margin-top: 1em;
+        border-top: 1px dashed $g6;
+        padding-top: 1em;
+        padding-bottom: 10px;
+    }
+    &__field {
+        padding: 2px 0;
+        label {
+            color: $g2;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            font-weight: bold;
+            &:after {
+                content: ":";
+                margin-right: 6px;
+            }
+        }
+        span {
+            font-size: 1.5rem;
+            color: $g2;
+            line-height: 1.4;
+            &.type_percent:after {
+                content: "%";
+                margin-left: 2px;
+                font-size: 1.2rem;
+                font-weight: bold;
+                vertical-align: 1px;
+            }
+        }
+    }
+    &__link {
+        color: $g3;
+        font-size: 1.2rem;
+        display: inline-block;
+        margin-top: 12px;
+        margin-bottom: -2px;
+        text-transform: uppercase;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+    &__price-wrapper {
+        position: relative;
+    }
+    &__price {
+        border-top: 1px dashed $g6;
+        padding-top: 10px;
+        display: block;
+        font-size: 2.8rem;
+        font-weight: bold;
+        color: $g2;
+        margin-top: 8px;
+        &:before {
+            content: "$";
+            font-size: 2.2rem;
+            vertical-align: 4px;
+            margin-right: 2px;
+        }
+    }
+    &__package {
+        display: block;
+        color: lighten($g2, 5%);
+        font-size: 1.3rem;
+    }
+    &__wishlist {
+        padding: 1em;
+        position: absolute;
+        right: 1em;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: 0.25s ease-out;
+        svg {
+            transition: 0.15s ease-out;
+            fill: $g4;
+        }
+        &:hover svg {
+            fill: $g3;
+        }
+        &.state_active {
+            svg {
+                fill: $red1;
+            }
+        }
+    }
+}

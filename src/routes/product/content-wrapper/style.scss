@@ -1,4 +1,5 @@
 @import '~styles/common/variables';
+@import '~styles/common/mixins';
 
 @mixin modal {
     background: white;
@@ -6,12 +7,17 @@
 }
 
 .product-wrapper {
-    max-width: 720px;
+    // max-width: 720px;
     margin: 2em auto;
     position: relative;
     &.type_modal {
         @include modal;
+        padding: 0 20px 1px;
     }
+    @include mobile {
+        padding: 0 20px;
+    }
+    
     &__close-modal {
         position: absolute;
         top: 0;
@@ -36,28 +42,11 @@
 
     // error
     &__error {
-        padding: 2.5em 2em;
-        text-align: center;
-        span {
-            display: block;
-            margin-top: 1.2em;
-            font-size: 1.6rem;
-            color: $g3;
-        }
         &.type_modal {
-            max-width: 400px;
             @include modal;
         }
         &.type_full {
             margin-top: 2em;
-        }
-    }
-    &__error-icon {
-        svg {
-            fill: $red2;
-            $size: 48px;
-            width: $size;
-            height: $size;
         }
     }
 }

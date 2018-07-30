@@ -1,5 +1,9 @@
 
-const MAIN_COLOR ='#6894a9'
+export const RED_MARKER = 'https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_red.png'
+export const BLUE_MARKER = 'https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_blue.png'
+
+const MAIN_COLOR ='#fd5c63'
+const WATER_COLOR = '#6894a9'
 const SATURATION_VALUE = -20;
 const BRIGHTNESS_VALUE = 5;
 
@@ -176,7 +180,7 @@ export const styles: google.maps.MapTypeStyle[] = [
         featureType: "water",
         elementType: "geometry",
         stylers: [
-            { hue: MAIN_COLOR },
+            { hue: WATER_COLOR },
             { visibility: "on" },
             { lightness: BRIGHTNESS_VALUE },
             { saturation: SATURATION_VALUE }

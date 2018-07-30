@@ -4,11 +4,13 @@ import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import P from 'prop-types';
 import { Link } from 'react-router-dom'
+import { withRouter } from 'react-router'
 
 import { Product } from 'api/lcbo'
 import Image from 'components/common/image/index'
 import { price } from 'utils/format'
-import { Gift } from 'components/icons/index'
+import { Gift, Search } from 'components/icons/index'
+import { getNonProductQS, PRODUCT_QUERY_KEY } from 'utils/query-string';
 
 
 interface ResultProps {
@@ -23,13 +25,19 @@ class Result extends Component<ResultProps, {}> {
 		this.props.toggleWishlistItem(this.props.result.id);
 	}
 
+	@computed get qs() {
+		return getNonProductQS(location.search)
+	}
+
 	render(){
 		const { result } = this.props
 		return (
 			<li className="result">
 				<Link to={{
-					pathname: `/p/${result.id}`,
-					state: {modal: true}
+					// search: `?p=${result.id}`
+					search: `${this.qs}&${PRODUCT_QUERY_KEY}=${result.id}`
+					// pathname: `/p/${result.id}`,
+					// state: {modal: true}
 				}}>
 					<div className="result__img">
 						<Image src={result.image_thumb_url} />
@@ -63,7 +71,11 @@ class Result extends Component<ResultProps, {}> {
 	wishlist: stores.wishlist,
 }))
 @observer
-export default class SearchResults extends Component<Props, {}> {
+class SearchResults extends Component<Props, {}> {
+	// const currentQuery = ''
+	/* @computed get currentQS(){
+		return location.search
+	} */
 	render() {
 		return (
 			<ul className="results">
@@ -78,6 +90,8 @@ export default class SearchResults extends Component<Props, {}> {
 		)
 	}
 }
+
+export default withRouter(SearchResults)
 
 SearchResults.propTypes = {
 	// TODO

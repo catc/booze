@@ -9,14 +9,16 @@
       "node": "8.9.4"
    },
    "dependencies": {
+      "@types/lodash": "^4.14.113",
       "axios": "^0.18.0",
+      "gsap": "^2.0.1",
       "lodash": "^4.17.10",
       "mobx": "^4.1.0",
       "mobx-react": "^5.0.0",
       "mobx-utils": "^4.0.0",
       "prop-types": "^15.6.1",
-      "react": "^16.2.0",
-      "react-dom": "^16.2.0",
+      "react": "^16.4.1",
+      "react-dom": "^16.4.1",
       "react-router": "^4.2.0",
       "react-router-dom": "^4.2.2",
       "react-transition-group": "^2.4.0"

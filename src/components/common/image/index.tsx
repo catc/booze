@@ -11,7 +11,7 @@ export default class ImageFade extends Component<Props, {}> {
         super(props)
     }
 
-    img: HTMLElement;
+    img: HTMLElement | null = null;
     componentDidMount(){
         if (this.img){
             if (this.img.complete){
@@ -37,14 +37,18 @@ export default class ImageFade extends Component<Props, {}> {
 
     render() {
         if (!this.props.src){
-            return <Image/>
+            return <div className={`state_svg ${this.props.className}`}>
+                <Image/>
+            </div>
         }
         return (
-            <img
-                className={`image-fade ${this.hasLoaded ? 'state_loaded' : ''} ${this.props.classes || ''}`}
-                ref={el => this.img = el }
-                src={this.props.src} alt="booze"
-            />
+            <div className={`state_img ${this.props.className}`}>
+                <img
+                    className={`image-fade ${this.hasLoaded ? 'state_loaded' : ''} ${this.props.classes || ''}`}
+                    ref={el => this.img = el }
+                    src={this.props.src} alt="booze"
+                />
+            </div>
         )
     }
 }
@@ -55,4 +59,5 @@ ImageFade.propTypes = {
 
 export interface Props {
     src: string;
+    className?: string;
 }

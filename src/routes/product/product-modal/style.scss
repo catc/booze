@@ -12,4 +12,15 @@
             // $size: 24px;
         }
     }
+
+    &__wrapper {
+        margin: 0 auto;
+        padding: 0 10px;
+        &.type_error {
+            max-width: 400px;
+        }
+        &.type_loaded {
+            max-width: $mq_desktop_min;
+        }
+    }
 }

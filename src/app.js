@@ -7,11 +7,11 @@ import 'styles/main.scss';
 import { Home, Info, Gift } from 'components/icons'
 
 // stores
-import ModalStore from 'store/modal';
 import WishlistStore from 'store/wishlist';
+import RecentlyViewed from 'store/recently-viewed';
 
-// components
-import ModalWrapper from 'components/common/modal/modal-wrapper';
+// modal
+import ModalContainer from 'components/common/modal/modal-container'
 
 // routes
 import Routes from 'routes/index';
@@ -28,8 +28,8 @@ export default class App extends Component {
 		return (
 			<Router>
 				<Provider
-					modalStore={ModalStore}
 					wishlist={WishlistStore}
+					recentlyViewed={RecentlyViewed}
 				>
 					<Fragment>
 						<nav className="container app-nav">
@@ -52,7 +52,7 @@ export default class App extends Component {
 						<Route component={Routes} />
 
 						{/* other stuff - ie: modal, growls, etc */}
-						<ModalWrapper/>
+						<ModalContainer/>
 					</Fragment>
 				</Provider>
 			</Router>

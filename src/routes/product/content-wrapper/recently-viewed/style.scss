@@ -1,0 +1,13 @@
+@import '~styles/common/variables';
+@import '~styles/common/mixins';
+
+.recently-viewed {
+
+
+    &__product {
+        img {
+            width: 50px;
+            height: 50px;
+        }
+    }
+}

@@ -28,7 +28,7 @@
 
     &__header {
         margin-top: 40px;
-        margin-bottom: 1em;
+        margin-bottom: 1.4em;
         h2 {
             // color: $g2;
             color: $g3;
@@ -40,10 +40,33 @@
         }
     }
     &__button {
-        margin-left: 0.5em;
         vertical-align: middle;
+        color: $g2;
+        font-size: 2rem;
+        font-size: 1.8rem;
         svg {
-            // fill: $red1 !important;
+            /* $size: 24px;
+            width: $size;
+            height: $size;
+            vertical-align: -4px;
+            margin-left: 4px;
+            */
+            fill: $g2;
+            $size: 18px;
+            width: $size;
+            height: $size;
+            vertical-align: -2px;
+            margin-left: 4px;
+        }
+
+        border-radius: 2px;
+        padding: 3px 7px;
+        transition: 0.2s ease-out;
+        border: 1px solid transparent;
+        &:hover {
+            background: $red1;
+            background: lighten($g6, 2%);
+            border-color: $g6;
         }
     }
 }

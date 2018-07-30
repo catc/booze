@@ -6,8 +6,8 @@ export interface Product {
 	name: string;
 	origin: string;
 	description: string;
-	package: string;
 	producer_name: string;
+	package: string;
 	alcohol_content: number;
 	is_dead: boolean;
 	is_discontinued: boolean;
@@ -18,17 +18,21 @@ export interface Product {
 	image_thumb_url: string;
 	tasting_note: string;
 	serving_suggestion: string;
+	varietal: string;
 }
 
 export interface Store {
-	id: string;
+	id: number;
 	name: string;
 	latitude: number;
 	longitude: number;
 	city: string;
+	quantity: number;
+	address_line_1: string;
+	address_line_2: string;
+	telephone: string;
 }
 
-// 
 const TOTAL_PRODUCT_ITEMS = 12852 // retrieved from api
 const RANDOM_PAGE_SIZE = 24
 const MAX_PRODUCT_PAGES = Math.floor(TOTAL_PRODUCT_ITEMS / RANDOM_PAGE_SIZE)
@@ -42,7 +46,9 @@ export async function search(term: string){
 	return await lcbo.request(url, {
 		params: {
 			q: term,
-			per_page: 5
+			per_page: 5,
+			// TODO - investigate if can see dead + discontinued stuff
+			// where: 'is_dead'
 		}
 	})
 }
@@ -62,7 +68,7 @@ export async function getProduct(id: number): Promise<{ result: Product }>{
 	return await lcbo.request(url)
 }
 
-export async function getStoreInventories(productID: string){
+export async function getStoreInventories(productID: number){
 	let stores: Store[] = []
 
 	// get first page
@@ -85,7 +91,7 @@ export async function getStoreInventories(productID: string){
 			return all.concat(resp.result)
 		}, stores)
 	}
-	return stores;
+	return stores.filter(s => s.quantity > 0);
 
 	async function req(page: number){
 		const url = '/stores';

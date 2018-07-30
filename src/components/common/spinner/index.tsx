@@ -2,16 +2,16 @@ import './style.scss';
 import React, { Component } from 'react';
 import { Aperture } from 'components/icons';
 
-function Spinner({ classes }: Props) {
+function Spinner({ className }: Props) {
     return (
-        <div className={`spinner ${classes ? classes : ''}`}>
+        <div className={`spinner ${className ? className : ''}`}>
             <Aperture/>
 		</div>
     )
 }
 
 export interface Props {
-    classes?: string;
+    className?: string;
 }
 
 export default Spinner

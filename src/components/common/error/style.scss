@@ -1,0 +1,20 @@
+@import '~styles/common/variables';
+
+.error-msg {
+    padding: 2.5em 2em;
+    text-align: center;
+    &__msg {
+        display: block;
+        margin-top: 1.2em;
+        font-size: 1.6rem;
+        color: $g3;
+    }
+    &__error-icon {
+        svg {
+            fill: $red2;
+            $size: 48px;
+            width: $size;
+            height: $size;
+        }
+    }
+}

@@ -23,7 +23,11 @@ function selectAnimation(animation){
 
 const wait = delay => new Promise(res => setTimeout(res, delay));
 
-// TODO - need observable?
+/* 
+	TODO - this component has become a clusterfuck, refactor
+*/
+
+@observer
 class ModalItem extends Component {
 	state = {
 		isVisible: false,
@@ -81,42 +85,46 @@ class ModalItem extends Component {
 	}
 
 	// options bound in decorator
-	@action setClasses = options => {
+	genState = options => {
 		// classes
 		let classes = options.additionalClasses || '';
-		if (options.fullScreen){
+		if (options.fullScreen) {
 			classes += ' type_full-screen'
 		}
 
-		if (options.center || options.maxWidth){
+		if (options.center || options.maxWidth) {
 			classes += ' type_center'
-			if (options.constrainedHeight){
+			if (options.constrainedHeight) {
 				classes += ' type_constrain-height'
 			}
-		} else if (options.sidebar){
+		} else if (options.sidebar) {
 			classes += 'type_sidebar'
 		}
 
 		// dialog div styles
 		const dialogStyles = {}
 		// if ((options.center || options.sidebar) && options.maxWidth){
-		if (options.maxWidth){
+		if (options.maxWidth) {
 			dialogStyles.maxWidth = options.maxWidth
 		}
 
 		// animation type
 		const animation = selectAnimation(options.animation);
 
-		this.setState({
+		return {
 			classes: classes,
 			anim: animation,
 			dialogStyles: dialogStyles,
-		})
+		};
+	}
+	@action setClasses = options => {
+		const state = this.genState(options)
+		this.setState(state)
 	}
 
 	// options bound in decorator
 	@action showContent = (opts, override = {}) => {
-		const options = Object.assign(opts, override);
+		const options = Object.assign({}, opts, override);
 		setTimeout(() => {
 			if (options.center){
 				const height = this.dialog.offsetHeight
@@ -139,10 +147,10 @@ class ModalItem extends Component {
 				}
 			}
 
+			const state = this.genState(options)
 			// actually display
-			this.setState({
-				isVisible: true,
-			})
+			state.isVisible = true;
+			this.setState(state)
 		}, 0);
 	}
 

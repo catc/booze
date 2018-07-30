@@ -42,7 +42,7 @@ function selectAnimation(animation?: string) {
 	}
 }
 
-export default function newModal(options: OpenModalOptions = {}) {
+export default function modalWrapper(options: OpenModalOptions = {}) {
 	return (ModalContent: ReactChildren) => {
 		@observer
 		class Modal extends Component<ChildComponentProps, {}> {
@@ -156,15 +156,12 @@ export default function newModal(options: OpenModalOptions = {}) {
 							ref={el => this.bg = el}>
 						</div>
 						<div
-							// ref={el => this.dialog = el}
 							className={`
 								modal__dialog
 								${this.contentWrapperClass}
 								${this.center ? 'type_center' : ''}
 							`}
-								// ${this.classes}
-							// style={this.dialogStyles}
-							>
+                        >
 							<div
 								ref={el => this.content = el}
 								className={`
@@ -172,7 +169,6 @@ export default function newModal(options: OpenModalOptions = {}) {
 									${this.anim}
 									${this.isVisible ? 'state_visible' : ''}
 								`}
-									// ${this.classes}
 							>
 								<ModalContent
 									{...this.props}

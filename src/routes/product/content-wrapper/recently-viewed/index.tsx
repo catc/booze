@@ -1,62 +1,61 @@
 import './style.scss';
 import React, { Component } from 'react';
-import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import P from 'prop-types';
 import { Link } from 'react-router-dom'
 
 import { getNonProductQS, PRODUCT_QUERY_KEY } from 'utils/query-string';
+import Image from 'components/common/image/index'
+import { TruncatedProduct } from 'store/recently-viewed'
+import { price } from 'utils/format'
+import { Clock, Delete } from 'components/icons/index'
 
-// TODO - change to stateless?
+function recentlyViewed({recent}){
+    const products: TruncatedProduct[] = recent.products.slice(1)
 
-@inject(stores => ({
-    recent: stores.recentlyViewed,
-}))
-@observer
-export default class RecentlyViewed extends Component<Props, {}> {
-    constructor(props: Props) {
-        super(props)
-
-        this.products = props.recent.products.slice(1)
+    if (!products.length) {
+        return null;
     }
 
-    @computed get qs(){
-        return getNonProductQS(location.search)
-    }
+    const qs = getNonProductQS(location.search)
 
-    render() {
-        if (!this.products.length){
-            return null;
-        }
-        return (
-            <div className="recently-viewed">
-                <h2>Recently viewed</h2>
-                <ul className="recently-viewed__list">
-                    {this.products.map(p => {
-                        return (
-                            <li
-                                key={p.id}
-                                className="recently-viewed__product"
-                            >
-                                <Link to={{
-                                    search: `${this.qs}&${PRODUCT_QUERY_KEY}=${p.id}`
-                                }}>
-                                    <img src={p.image_thumb_url} alt=""/>
-                                    <span>{p.name}</span>
-                                </Link>
-                            </li>
-                        )
-                    })}
-                </ul>
-			</div>
-        )
-    }
+    return (
+        <div className="recently-viewed">
+            <div className="recently-viewed__header">
+                <h2 className="recently-viewed__title"><Clock /> Recently viewed</h2>
+                <button
+                    onClick={recent.clear}
+                    className="recently-viewed__clear"
+                ><Delete /> Clear</button>
+            </div>
+            <ul className="recently-viewed__list">
+                {products.map(p => {
+                    return (
+                        <li
+                            key={p.id}
+                            className="recently-viewed__product"
+                        >
+                            <Link to={{
+                                search: `${qs}&${PRODUCT_QUERY_KEY}=${p.id}`
+                            }}>
+                                <Image
+                                    src={p.image_thumb_url}
+                                    className="recently-viewed__image"
+                                />
+
+                                <div className="recently-viewed__content">
+                                    <span className="recently-viewed__name overflow-ellipsis">{p.name}</span>
+                                    <span className="recently-viewed__price price type_small">{price(p.price_in_cents)}</span>
+                                    <span className="recently-viewed__package">{p.package}</span>
+                                </div>
+                            </Link>
+                        </li>
+                    )
+                })}
+            </ul>
+        </div>
+    )
 }
-
-RecentlyViewed.propTypes = {
-
-}
-
-export interface Props {
-    // someProp: string;
-}
+export default inject(stores => ({
+    recent: stores.recentlyViewed
+}))(observer(recentlyViewed))

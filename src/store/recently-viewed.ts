@@ -46,7 +46,7 @@ class RecentlyViewed {
         this._save(products)
     }
 
-    clear(){
+    clear = () => {
         this.products = [];
         this._save([])
     }

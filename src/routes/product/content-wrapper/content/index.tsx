@@ -91,7 +91,7 @@ export default class ProductContent extends Component<Props, {}> {
                     {/* price */}
                     <div className="product__price-wrapper">
                         {product.price_in_cents ?
-                            <span className="product__price">{price(product.price_in_cents)}</span>
+                            <span className="product__price price">{price(product.price_in_cents)}</span>
                             :
                             null
                         }

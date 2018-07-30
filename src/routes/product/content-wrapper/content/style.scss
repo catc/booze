@@ -32,14 +32,15 @@
         @include desktop {
             width: $img-width;
         }
-        // TODO 
         @include mobile {
             width: 100%;
             text-align: center;
+            // height: calc(100% * #{$aspect});
+            // padding-top: 100% * $aspect;
             height: $img-width * $aspect + ($border + $padding) * 2;
             img {
                 display: inline-block;
-                width: 300px;
+                width: $img-width;
             }
         }
     }
@@ -139,17 +140,7 @@
     &__price {
         border-top: 1px dashed $g6;
         padding-top: 10px;
-        display: block;
-        font-size: 2.8rem;
-        font-weight: bold;
-        color: $g2;
         margin-top: 8px;
-        &:before {
-            content: "$";
-            font-size: 2.2rem;
-            vertical-align: 4px;
-            margin-right: 2px;
-        }
     }
     &__package {
         display: block;

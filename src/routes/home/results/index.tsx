@@ -50,7 +50,7 @@ class Result extends Component<ResultProps, {}> {
 							}
 						</span>
 						<div className="result__price-wrapper">
-							<span className="result__price">{price(result.price_in_cents)}</span>
+							<span className="result__price price">{price(result.price_in_cents)}</span>
 							<span className="result__package">{result.package}</span>
 							<button
 								className="result__wishlist"

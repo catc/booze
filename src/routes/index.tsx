@@ -24,7 +24,7 @@ export default class Routes extends Component<Props, {}> {
     async _redirectIfProduct(){
         // it there a product query param, redirect to product page
         if (this.productQS){
-            this.props.history.push({
+            this.props.history.replace({
                 pathname: `/p/${this.productQS}`
             })
         }

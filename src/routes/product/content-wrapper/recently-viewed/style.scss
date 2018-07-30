@@ -2,12 +2,136 @@
 @import '~styles/common/mixins';
 
 .recently-viewed {
-
-
-    &__product {
-        img {
-            width: 50px;
-            height: 50px;
+    margin-top: 4em;
+    padding-top: 1em;
+    border-top: 1px dashed $g6;
+    padding-bottom: 2em;
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 1em;
+        min-height: 50px;
+    }
+    &__title {
+        font-weight: normal;
+        color: $g2;
+        font-size: 1.9rem;
+        svg {
+            margin-right: 3px;
+            fill: lighten($g2, 9%);
+            vertical-align: -5px;
+            $size: 18px;
+            width: $size;
+            height: $size;
+            vertical-align: -3px;
         }
+    }
+    &__clear {
+        display: none;
+        opacity: 0;
+        animation: fadeIn 0.3s ease-out forwards;
+        border: 1px solid $g6;
+        border-radius: 2px;
+        vertical-align: middle;
+        padding: 1px 9px;
+        padding-right: 10px;
+        color: $g3;
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        transition: 0.15s ease;
+        svg {
+            fill: lighten($g3, 3%);
+            $size: 18px;
+            height: $size;
+            width: $size;
+            vertical-align: -4px;
+            transition: 0.15s ease;
+            margin-right: 5px;
+        }
+        &:hover {
+            $col: lighten($g2, 10%);
+            color: $col;
+            border-color: $col;
+            svg { fill: $col; }
+        }
+    }
+    &:hover &__clear {
+        display: inline-block;
+    }
+
+
+    &__list {
+        margin-top: 1em;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-column-gap: 10px;
+        grid-row-gap: 1em;
+        @include mobile {
+            grid-template-columns: repeat(2, 1fr);
+            grid-column-gap: 1em;
+        }
+    }
+    &__product {
+        display: inline-block;
+        background: white;
+        box-shadow:
+            0 1px 2px rgba(black, 0.09),
+            0 0px 2px rgba(black, 0.05);
+        border-radius: 3px;
+        overflow: hidden;
+        a { display: block; }
+    }
+    &__image {
+        width: 100%;
+        position: relative;
+        $img-width: 65%;
+        $aspect: 4 / 3;
+        padding-top: $img-width * $aspect + 5%;
+        img {
+            width: $img-width;
+            margin-top: 3%;
+        }
+        svg, img {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        &.state_img img {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        &.state_svg svg{
+            top: 50%;
+            margin-top: -12px;
+            display: block;
+            text-align: center;
+            width: 100%;
+            fill: $g3;
+        }
+    }
+
+    &__content {
+        padding: 8px;
+        padding-bottom: 10px;
+        &:before {
+            content: "";
+            display: block;
+            border-top: 1px dashed $g6;
+        }
+    }
+    &__name {
+        margin-top: 6px;
+        display: block;
+        width: 100%;
+        color: $g1;
+        font-size: 1.5rem;
+    }
+    &__price {
+        display: block;
+    }
+    &__package {
+        display: block;
+        color: $g3;
+        font-size: 1.3rem;
     }
 }

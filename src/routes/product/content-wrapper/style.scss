@@ -7,7 +7,7 @@
 }
 
 .product-wrapper {
-    // max-width: 720px;
+    max-width: $mq_desktop_min;
     margin: 2em auto;
     position: relative;
     &.type_modal {

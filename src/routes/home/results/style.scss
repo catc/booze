@@ -10,6 +10,10 @@
         grid-template-columns: 400px;
         justify-content: center;
     }
+    @include mq(max, 510px){
+        grid-template-columns: 100%;
+        justify-content: center;
+    }
 }
 
 .result {
@@ -146,7 +150,7 @@
         &:hover svg {
             fill: $g3;
         }
-        &.state_active {
+        &.state_selected {
             opacity: 1;
             svg {
                 fill: $red1;

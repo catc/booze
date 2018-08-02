@@ -9,6 +9,9 @@ import Image from 'components/common/image'
 import { price, alcohol, lcboLink } from 'utils/format'
 import { Gift } from 'components/icons/index'
 
+@inject(stores => ({
+    wishlist: stores.wishlist,
+}))
 @observer
 export default class ProductContent extends Component<Props, {}> {
     constructor(props: Props) {
@@ -31,6 +34,22 @@ export default class ProductContent extends Component<Props, {}> {
                 </div>
             </>
         )
+    }
+
+    @computed get wishlistClasses(): string {
+        const p = this.props.wishlist.saved.get(this.props.product.id)
+        let classes = ''
+        if (p){
+            classes += 'state_active '
+            if (p.isNew){
+                classes += 'state_new'
+            }
+        }
+        return classes
+    }
+
+    wishlist = () => {
+        this.props.wishlist.toggle(this.props.product)
     }
 
     render() {
@@ -98,7 +117,7 @@ export default class ProductContent extends Component<Props, {}> {
                         <span className="product__package">{product.package}</span>
 
                         <button
-                            className="product__wishlist"
+                            className={`product__wishlist ${this.wishlistClasses}`}
                             onClick={this.wishlist}
                         ><Gift /></button>
                     </div>

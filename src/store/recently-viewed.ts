@@ -1,15 +1,8 @@
 import { observable, action, computed } from 'mobx';
+import { TruncatedProduct } from 'api/lcbo'
 
 const RECENTLY_VIEWED_KEY = 'recent_view_v1'
 const HISTORY_LENGTH = 5
-
-interface TruncatedProduct {
-    id: number;
-    name: string;
-    image_thumb_url: string;
-    price_in_cents: number;
-    package: string;
-}
 
 class RecentlyViewed {
     @observable products: TruncatedProduct[];

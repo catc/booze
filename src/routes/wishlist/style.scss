@@ -1,0 +1,29 @@
+@import '~styles/common/variables';
+
+.wishlist {
+    max-width: $mq_big;
+    padding: 2em 0;
+    
+    h1 {
+        font-weight: 400;
+        color: $g2;
+        &.state_empty {
+            text-align: center;
+        }
+    }
+    
+    &__empty {
+        padding: 2em;
+        text-align: center;
+        font-size: 1.6rem;
+        color: $g3;
+    }
+
+    &__list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-column-gap: 1.5em;
+        grid-row-gap: 2em;
+        position: relative;
+    }
+}

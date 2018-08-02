@@ -136,11 +136,15 @@
     }
     &__price-wrapper {
         position: relative;
-    }
-    &__price {
         border-top: 1px dashed $g6;
         padding-top: 10px;
         margin-top: 8px;
+
+        display: grid;
+        grid-template-columns: auto min-content;
+    }
+    &__price {
+        // ...
     }
     &__package {
         display: block;
@@ -148,11 +152,10 @@
         font-size: 1.3rem;
     }
     &__wishlist {
+        grid-row: 1 / span 2;
+        grid-column: 2;
+        margin-right: 4px;
         padding: 1em;
-        position: absolute;
-        right: 1em;
-        top: 50%;
-        transform: translateY(-50%);
         transition: 0.25s ease-out;
         svg {
             transition: 0.15s ease-out;
@@ -165,6 +168,9 @@
             svg {
                 fill: $red1;
             }
+        }
+        &.state_new {
+            animation: pop 0.3s ease-out;
         }
     }
 }

@@ -11,22 +11,28 @@ import Image from 'components/common/image/index'
 import { price } from 'utils/format'
 import { Gift, Search } from 'components/icons/index'
 import { getNonProductQS, PRODUCT_QUERY_KEY } from 'utils/query-string';
+import { Wishlist } from 'store/wishlist';
 
 
 interface ResultProps {
 	result: Product;
-	toggleWishlistItem: (id: number) => {}
+	wishlist: Wishlist;
+	isWishListed: boolean;
 }
 
 @observer
 class Result extends Component<ResultProps, {}> {
 	wishlist = (e: SyntheticEvent<HTMLElement>) => {
 		e.preventDefault();
-		this.props.toggleWishlistItem(this.props.result.id);
+		this.props.wishlist.toggle(this.props.result);
 	}
 
 	@computed get qs() {
 		return getNonProductQS(location.search)
+	}
+
+	@computed get isWishlisted(){
+		return this.props.wishlist.saved.has(this.props.result.id)
 	}
 
 	render(){
@@ -53,7 +59,7 @@ class Result extends Component<ResultProps, {}> {
 							<span className="result__price price">{price(result.price_in_cents)}</span>
 							<span className="result__package">{result.package}</span>
 							<button
-								className="result__wishlist"
+								className={`result__wishlist ${this.isWishlisted ? 'state_selected' : ''}`}
 								onClick={this.wishlist}
 							><Gift /></button>
 						</div>
@@ -64,12 +70,11 @@ class Result extends Component<ResultProps, {}> {
 	}
 }
 
-// TODO - convert to stateless
 @inject(stores => ({
 	wishlist: stores.wishlist,
 }))
 @observer
-class SearchResults extends Component<Props, {}> {
+class SearchResults extends Component<SearchResultsProps, {}> {
 	render() {
 		return (
 			<ul className="results">
@@ -77,7 +82,7 @@ class SearchResults extends Component<Props, {}> {
 					<Result
 						key={res.id}
 						result={res}
-						toggleWishlistItem={this.props.wishlist.toggleItem}
+						wishlist={this.props.wishlist}
 					/>
 				)}
 			</ul>
@@ -87,6 +92,6 @@ class SearchResults extends Component<Props, {}> {
 
 export default withRouter(SearchResults)
 
-SearchResults.propTypes = {
-	// TODO
+interface SearchResultsProps {
+	wishlist: Wishlist;
 }

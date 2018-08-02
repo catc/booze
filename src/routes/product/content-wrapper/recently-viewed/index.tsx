@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom'
 
 import { getNonProductQS, PRODUCT_QUERY_KEY } from 'utils/query-string';
 import Image from 'components/common/image/index'
-import { TruncatedProduct } from 'store/recently-viewed'
+import { TruncatedProduct } from 'api/lcbo'
 import { price } from 'utils/format'
-import { Clock, Delete } from 'components/icons/index'
+import { Clock } from 'components/icons/index'
 
 function recentlyViewed({recent}){
     const products: TruncatedProduct[] = recent.products.slice(1)
@@ -26,7 +26,7 @@ function recentlyViewed({recent}){
                 <button
                     onClick={recent.clear}
                     className="recently-viewed__clear"
-                ><Delete /> Clear</button>
+                >Clear History</button>
             </div>
             <ul className="recently-viewed__list">
                 {products.map(p => {

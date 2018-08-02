@@ -21,6 +21,14 @@ export interface Product {
 	varietal: string;
 }
 
+export interface TruncatedProduct {
+	id: number;
+	name: string;
+	image_thumb_url: string;
+	price_in_cents: number;
+	package: string;
+}
+
 export interface Store {
 	id: number;
 	name: string;

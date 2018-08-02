@@ -2,9 +2,10 @@
 @import '~styles/common/mixins';
 
 .recently-viewed {
-    margin-top: 4em;
+    // margin-top: 4em;
+    // border-top: 1px dashed $g6;
+    margin-top: 5em;
     padding-top: 1em;
-    border-top: 1px dashed $g6;
     padding-bottom: 2em;
     &__header {
         display: flex;
@@ -29,7 +30,7 @@
     &__clear {
         display: none;
         opacity: 0;
-        animation: fadeIn 0.3s ease-out forwards;
+        animation: fadeIn 0.3s 0.5s ease-out forwards;
         border: 1px solid $g6;
         border-radius: 2px;
         vertical-align: middle;
@@ -40,7 +41,7 @@
         text-transform: uppercase;
         transition: 0.15s ease;
         svg {
-            fill: lighten($g3, 3%);
+            fill: lighten($g3, 7%);
             $size: 18px;
             height: $size;
             width: $size;
@@ -61,7 +62,7 @@
 
 
     &__list {
-        margin-top: 1em;
+        // margin-top: 1em;
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         grid-column-gap: 10px;

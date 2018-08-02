@@ -7,13 +7,13 @@ import HomeRoute from 'routes/home/index'
 import NotFound from 'routes/four-oh-four/index'
 import ProductModal from 'routes/product/product-modal/index'
 import ProductFullPage from 'routes/product/full-page/index'
+import WishlistPage from 'routes/wishlist/index'
 import { Location, History } from 'node_modules/@types/history/index';
 import { getQueryParam, getNonProductQS, PRODUCT_QUERY_KEY } from 'utils/query-string';
 import { wait } from 'utils/async'
 
 @observer
 export default class Routes extends Component<Props, {}> {
-    
     constructor(props: Props) {
         super(props)
         
@@ -45,6 +45,7 @@ export default class Routes extends Component<Props, {}> {
                 <Switch>
                     <Route path="/" exact component={HomeRoute} />
                     <Route path="/p/:id" component={ProductFullPage} />
+                    <Route path="/wishlist" component={WishlistPage} />
                     <Route component={NotFound} />
                 </Switch>
 

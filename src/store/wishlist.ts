@@ -32,9 +32,10 @@ export class Wishlist {
         } else {
             this.saved = new Map()
         }
+        window.s = this.saved
     }
 
-    toggle = (product: Product) => {
+    toggle = (product: Product | TruncatedProduct) => {
         const id = product.id
         if (this.saved.has(id)) {
             this.saved.delete(id)
@@ -53,6 +54,21 @@ export class Wishlist {
             package: p.package,
             isNew: true
         }
+    }
+
+    remove = (ids: number[]) => {
+        /* 
+            create new map, remove everything, then set old map as new map
+            need to do it this way for item animation to work nicely otherwise
+            as you loop through each item and remove it, the immediate position change
+            causes the animation to mess up
+        */
+        const newMap = new Map(this.saved);
+        ids.forEach(id => {
+            newMap.delete(id)
+        })
+        this.saved = newMap
+        // this._save()
     }
 
     clear = () => {

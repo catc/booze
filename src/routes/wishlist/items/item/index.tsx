@@ -7,6 +7,7 @@ import P from 'prop-types';
 import { TruncatedProduct } from 'store/lcbo'
 import productModal from '../../../product/product-modal/index';
 import { wait } from 'utils/async'
+import { Circle, Checkcircle } from 'components/icons/index'
 
 function transform(x: number, y: number){
     return `translate(${x}px, ${y}px)`
@@ -28,6 +29,7 @@ export default class WishlistItem extends Component<Props, {}> {
     getSnapshotBeforeUpdate(prevProps){
         if (prevProps.index !== this.props.index){
             const position = [this.el.offsetLeft, this.el.offsetTop]
+            console.log('old position is', position, this.props.product.id)
             return { oldPosition: position }
         }
         return null
@@ -51,15 +53,24 @@ export default class WishlistItem extends Component<Props, {}> {
 
         await wait(0)
 
-        const delay = Math.min(Math.pow(this.props.index - this.props.removeIndex, 1.5), 7.5)
+        const delay = Math.min(Math.pow(this.props.index - this.props.removeIndex, 1.4), 7.5)
+        // console.log(this.props.index - this.props.removeIndex)
+        // console.log('delay is', delay)
+        // const diff = this.props.index - this.props.removeIndex
+        // const delay = Math.min(diff * diff, 7.5)
         this.transition = transition(delay * 50)
         this.transform = transform(0, 0)
+    }
+
+    select = () => {
+        this.props.select(this.props.product);
     }
 
     render() {
         const {product} = this.props
         return (
             <li
+                data-id={product.id}
                 className="wishlist-item"
                 ref={el => this.el = el}
                 style={{
@@ -68,9 +79,16 @@ export default class WishlistItem extends Component<Props, {}> {
                 }}
                 // onClick={this.remove}
             >
-                {product.name}
+                {product.name} - {product.id}
              
                 <button onClick={this.remove}>Remove</button>
+                <button onClick={this.select}>
+                    {product.selected ?
+                        <Checkcircle/>
+                        :
+                        <Circle/>
+                    }
+                </button>
 			</li>
         )
     }

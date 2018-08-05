@@ -33,18 +33,18 @@ export default class WishlistRoute extends Component<Props, {}> {
         */
     //    console.log('RECOMPUTING')
         const saved: TruncatedProduct[] = []
-        /* 
+        
         this.props.wishlist.saved.forEach(product => saved.push(
             observable(Object.assign({selected: false}, product)))
-        ) */
-        let i = 0;
+        )
+        /* let i = 0;
         this.props.wishlist.saved.forEach((product) => {
             const obj = observable(Object.assign({
                 selected: [4, 5].includes(i) ? true : false
             }, product))
             saved.push(obj)
             i++
-        })
+        }) */
        /*  this.props.wishlist.saved.forEach(product => saved.push(
             product
         )) */
@@ -53,17 +53,16 @@ export default class WishlistRoute extends Component<Props, {}> {
     }
     
     @action select = (product) => {
-        console.log('product is', product)
         product.selected = !product.selected
     }
 
     // remove index used by child to calculate transition delay
     @observable removeIndex: number | null = null;
 
-    remove = (product: TruncatedProduct) => { // TODO - remove
+    /* remove = (product: TruncatedProduct) => { // TODO - remove
         this.removeIndex = this.saved.indexOf(product)
         this.props.wishlist.toggle(product)
-    }
+    } */
     
     @action delete = async () => {
         const ids = this.saved.filter(p => p.selected).map(p => p.id)
@@ -86,24 +85,55 @@ export default class WishlistRoute extends Component<Props, {}> {
         return this.saved.filter(s => s.selected)
     }
 
-    // @observable displayLocationCheck = false;
-    @observable displayLocationCheck = true;
+    @observable displayLocationCheck = false;
+    // @observable displayLocationCheck = true;
     @action toggleLocationCheck = () => {
         this.displayLocationCheck = !this.displayLocationCheck;
     }
 
+    @action confirmClear = () => {
+        if (window.confirm('Are you sure you want to clear your wishlist?')){
+            this.props.wishlist.clear()
+        }
+    }
+
     render() {
+        if (this.isEmpty){
+            return (
+                <div className="wishlist container">
+                    <h1>Wishlist</h1>
+                    <p className="wishlist__instructions">Add products to your wishlist</p>
+                </div>
+            )
+        }
         const { wishlist } = this.props
         return (
             <div className="wishlist container">
-                {/* <h1 className={this.isEmpty ? 'state_empty' : ''}>Wishlist</h1> */}
+                <h1>Wishlist</h1>
+                <p className="wishlist__instructions">Select two or more products to check common location availability</p>
 
-                <button onClick={this.delete}>Delete bulk</button>
-                {this.selected.length > 1 ?
-                    <button onClick={this.toggleLocationCheck}>Check locations</button>
-                    :
-                    null
-                }
+                <div className="wishlist__actions">
+                    {this.selected.length ?
+                        <button
+                            onClick={this.delete}
+                            className="wishlist__action type_delete"
+                        >Remove item{this.selected.length === 1 ? '' : 's'}</button>
+                        :
+                        null
+                    }
+                    {this.selected.length > 1 ?
+                        <button
+                            onClick={this.toggleLocationCheck}
+                            className="wishlist__action type_location"
+                        >Check locations</button>
+                        :
+                        null
+                    }
+                    <button
+                        onClick={this.confirmClear}
+                        className="wishlist__action type_clear"
+                    >Clear List</button>
+                </div>
 
                 {this.isEmpty ?
                     <div className="wishlist__empty">You have no items on your wishlist</div>

@@ -38,28 +38,28 @@ export default class LocationCheck extends Component<Props, {}> {
         }
     }
 
-    storeMap: { [storeID: string]: Store } = {}
+    // storeMap: { [storeID: string]: Store } = {}
 
     // check which stores have at least 2+ of the products selected
     analyse(hash: { [id: string]: Store[] }){
         // map of store ids to store
-        const storeMap: {[storeID: string]: Store} = {}
-
-        // convert each array of stores to set of store ids
+        // const storeMap: {[storeID: string]: Store} = {}
         const productIDs = Object.keys(hash)
-
+        
+        // convert each array of stores to set of store ids
         type productIDsToStoreIDsSet = {[productID: string]: Set<number>};
         const productToStoreIDs: productIDsToStoreIDsSet = productIDs.reduce((obj, productID) => {
             const stores = hash[productID]
             // cache store in map
-            const storeIDs = stores.map((s: Store) => {
-                storeMap[s.id] = s
+            const storeIDs = stores.map((s: Store) => s.id)
+            /* const storeIDs = stores.map((s: Store) => {
+                // storeMap[s.id] = s
                 return s.id
-            })
+            }) */
             obj[productID] = new Set(storeIDs)
             return obj
         }, {})
-        this.storeMap = storeMap;
+        // this.storeMap = storeMap;
 
         const storesSearched: {[key: number]: boolean} = {}
 
@@ -110,10 +110,10 @@ export default class LocationCheck extends Component<Props, {}> {
             }
         */
 
-        this.handleShared(shared, storeMap)
+        this.handleShared(shared)
     }
 
-    @computed get productMap(){
+    @computed get productMap(): {[productID: string]: Product} {
         return this.props.selected.reduce((obj, product) => {
             obj[product.id] = product
             return obj
@@ -133,6 +133,13 @@ export default class LocationCheck extends Component<Props, {}> {
             return {products, stores: []}
         })
         this.groups = groups
+
+        /* 
+            LEFT OFF HERE
+            - when opening map with store list, basically for every single product,
+            need to get the store quantity specific for that product
+            - need to pass in custom quantity somehow to map
+        */
     }
     @observable groups = [];
 

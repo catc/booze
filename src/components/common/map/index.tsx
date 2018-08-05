@@ -161,5 +161,4 @@ ProductAvailability.propTypes = {
 
 export interface Props {
     stores: Store[];
-    product: Product
 }

@@ -14,7 +14,7 @@ import { Product } from 'api/lcbo'
 import { getStoreInventories, Store } from 'api/lcbo'
 import Spinner from 'components/common/spinner/index'
 import ErrorMsg from 'components/common/error/index'
-import Map from './map/index';
+import Map from 'components/common/map/index';
 
 const DURATION = 300;
 const AnimContainer = observer(({ status, val, children, onEnter}: AnimContainer) => (
@@ -121,7 +121,6 @@ export default class MapWrapper extends Component<Props, {}> {
                 >
                     <Map
                         stores={this.stores}
-                        product={this.props.product}
                     />
                 </AnimContainer>
 			</div>

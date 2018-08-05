@@ -1,29 +1,72 @@
 @import '~styles/common/variables';
+@import '~styles/common/mixins';
 
 .wishlist {
     max-width: $mq_big;
     padding: 2em 0;
+    @include mq(max, $mq_big){
+        padding-left: 1em;
+        padding-right: 1em;
+    }
     
     h1 {
         font-weight: 400;
         color: $g2;
-        &.state_empty {
-            text-align: center;
-        }
-    }
-    
+    }   
     &__empty {
         padding: 2em;
         text-align: center;
         font-size: 1.6rem;
         color: $g3;
     }
+    &__instructions {
+        font-size: 1.5rem;
+        color: $g2;
+    }
+    &__actions {
+        height: 60px;
+    }
+    &__action {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 2px;
+        color: $g2;
+        border: 1px solid $g3;
+        transition: 0.15s ease-out;
+        &.type_delete {
+            margin-right: 1em;
+        }
+        &.type_delete, &.type_location {
+            &:hover {
+                border-color: $red2 ;
+                background: $red2   ;
+                color: white;
+            }
+        }
+        &.type_clear {
+            float: right;
+            border-color: $g6;
+            color: $g3;
+            &:hover {
+                background: $g2;
+                color: white;
+                border-color: $g2;
+            }
+        }
+    }
 
     &__list {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        grid-column-gap: 1.5em;
-        grid-row-gap: 2em;
+        grid-template-columns: repeat(3, 1fr);
+        grid-column-gap: 1em;
+        grid-row-gap: 1em;
         position: relative;
+        @include mq(max, $mq_big){
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @include mq(max, 640px){
+            grid-template-columns: 360px;
+            justify-content: center
+        }
     }
 }

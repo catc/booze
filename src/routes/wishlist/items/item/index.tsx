@@ -5,15 +5,17 @@ import { observer, inject } from 'mobx-react';
 import P from 'prop-types';
 
 import { TruncatedProduct } from 'store/lcbo'
-import productModal from '../../../product/product-modal/index';
 import { wait } from 'utils/async'
 import { Circle, Checkcircle } from 'components/icons/index'
+import Image from 'components/common/image/index'
+import ProductLink from 'components/common/product-link/index'
+import { price } from 'utils/format'
 
 function transform(x: number, y: number){
     return `translate(${x}px, ${y}px)`
 }
 function transition(delay = 0){
-    return `transform 0.3s ${delay}ms ease`
+    return `transform 0.3s ${delay}ms ease, border-color 0.2s ease-out`
 }
 
 @observer
@@ -26,10 +28,9 @@ export default class WishlistItem extends Component<Props, {}> {
         this.props.remove(this.props.product)
     }
 
-    getSnapshotBeforeUpdate(prevProps){
+    getSnapshotBeforeUpdate(prevProps: Props){
         if (prevProps.index !== this.props.index){
             const position = [this.el.offsetLeft, this.el.offsetTop]
-            console.log('old position is', position, this.props.product.id)
             return { oldPosition: position }
         }
         return null
@@ -37,7 +38,7 @@ export default class WishlistItem extends Component<Props, {}> {
 
     @observable transform = ''
     @observable transition = ''
-    componentDidUpdate(pp, ps, snapshot){
+    componentDidUpdate(pp, ps, snapshot: null | {position: [number, number]}){
         if (snapshot && snapshot.oldPosition){
             const p = snapshot.oldPosition
             const x = p[0] - this.el.offsetLeft
@@ -54,15 +55,12 @@ export default class WishlistItem extends Component<Props, {}> {
         await wait(0)
 
         const delay = Math.min(Math.pow(this.props.index - this.props.removeIndex, 1.4), 7.5)
-        // console.log(this.props.index - this.props.removeIndex)
-        // console.log('delay is', delay)
-        // const diff = this.props.index - this.props.removeIndex
-        // const delay = Math.min(diff * diff, 7.5)
         this.transition = transition(delay * 50)
         this.transform = transform(0, 0)
     }
 
-    select = () => {
+    select = (e) => {
+        e.preventDefault()
         this.props.select(this.props.product);
     }
 
@@ -71,24 +69,36 @@ export default class WishlistItem extends Component<Props, {}> {
         return (
             <li
                 data-id={product.id}
-                className="wishlist-item"
+                className={`wishlist-item ${product.selected ? 'state_active' : ''}`}
                 ref={el => this.el = el}
                 style={{
                     transform: this.transform,
                     transition: this.transition
                 }}
-                // onClick={this.remove}
             >
-                {product.name} - {product.id}
-             
-                <button onClick={this.remove}>Remove</button>
-                <button onClick={this.select}>
-                    {product.selected ?
-                        <Checkcircle/>
-                        :
-                        <Circle/>
-                    }
-                </button>
+                <ProductLink productID={product.id}>
+                    <Image
+                        className="wishlist-item__image"
+                        src={product.image_thumb_url}
+                    />
+
+                    <button
+                        onClick={this.select}
+                        className={`wishlist-item__select ${product.selected ? 'state_active' : ''}`}
+                    >
+                        {product.selected ?
+                            <Checkcircle/>
+                            :
+                            <Circle/>
+                        }
+                    </button>
+
+                    <div className="wishlist-item__content">
+                        <span className="wishlist-item__name overflow-ellipsis">{product.name}</span>
+                        <span className="wishlist-item__price price type_small">{price(product.price_in_cents)}</span>
+                        <span className="wishlist-item__package">{product.package}</span>
+                    </div>
+                </ProductLink>
 			</li>
         )
     }
@@ -102,4 +112,6 @@ export interface Props {
     product: TruncatedProduct;
     index: number;
     removeIndex: number;
+    remove: (id: number) => void
+    select: (id: number) => void
 }

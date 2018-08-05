@@ -97,7 +97,7 @@ export default class StoreList extends Component<Props, {}> {
                             selectStore={this.props.selectStore}
                             selectedStoreID={this.props.selectedStoreID}
                         />
-                    )}
+                    ))}
                 </ul>
 			</div>
         )

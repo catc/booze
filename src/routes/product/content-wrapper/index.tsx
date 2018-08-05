@@ -97,7 +97,7 @@ export default class ProductView extends Component<Props, {}> {
                 {/* content + map */}
                 <ProductContent product={this.product}/>
                 <MapWrapper product={this.product}/>
-                <RecentlyViewed/>
+                <RecentlyViewed isModal={this.props.isModal}/>
 			</div>
         )
     }

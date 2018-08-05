@@ -9,6 +9,7 @@ import Image from 'components/common/image/index'
 import { TruncatedProduct } from 'api/lcbo'
 import { price } from 'utils/format'
 import { Clock } from 'components/icons/index'
+import ProductLink from 'components/common/product-link/index'
 
 function recentlyViewed({recent}){
     const products: TruncatedProduct[] = recent.products.slice(1)
@@ -17,7 +18,7 @@ function recentlyViewed({recent}){
         return null;
     }
 
-    const qs = getNonProductQS(location.search)
+    // const qs = getNonProductQS(location.search)
 
     return (
         <div className="recently-viewed">
@@ -33,11 +34,9 @@ function recentlyViewed({recent}){
                     return (
                         <li
                             key={p.id}
-                            className="recently-viewed__product"
+                            className={`recently-viewed__product ${this.props.isModal ? 'type_modal' : ''}`}
                         >
-                            <Link to={{
-                                search: `${qs}&${PRODUCT_QUERY_KEY}=${p.id}`
-                            }}>
+                            <ProductLink productID={p.id}>
                                 <Image
                                     src={p.image_thumb_url}
                                     className="recently-viewed__image"
@@ -48,7 +47,7 @@ function recentlyViewed({recent}){
                                     <span className="recently-viewed__price price type_small">{price(p.price_in_cents)}</span>
                                     <span className="recently-viewed__package">{p.package}</span>
                                 </div>
-                            </Link>
+                            </ProductLink>
                         </li>
                     )
                 })}

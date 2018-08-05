@@ -32,7 +32,7 @@ export class Wishlist {
         } else {
             this.saved = new Map()
         }
-        window.s = this.saved
+        window.s = this.saved // FOR TESTING
     }
 
     toggle = (product: Product | TruncatedProduct) => {

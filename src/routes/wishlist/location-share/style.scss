@@ -1,0 +1,12 @@
+@import '~styles/common/variables';
+@import '~styles/common/mixins';
+
+.wishlist-location {
+    max-width: 600px;
+    margin: 2em auto;
+    @include mq(max, 600px){
+        margin-left: 1em;
+        margin-right: 1em;
+    }
+    background: white;
+}

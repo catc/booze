@@ -34,17 +34,17 @@ export default class WishlistRoute extends Component<Props, {}> {
     //    console.log('RECOMPUTING')
         const saved: TruncatedProduct[] = []
         
-        this.props.wishlist.saved.forEach(product => saved.push(
+        /* this.props.wishlist.saved.forEach(product => saved.push(
             observable(Object.assign({selected: false}, product)))
-        )
-        /* let i = 0;
+        ) */
+        let i = 0;
         this.props.wishlist.saved.forEach((product) => {
             const obj = observable(Object.assign({
                 selected: [4, 5].includes(i) ? true : false
             }, product))
             saved.push(obj)
             i++
-        }) */
+        })
        /*  this.props.wishlist.saved.forEach(product => saved.push(
             product
         )) */
@@ -155,6 +155,7 @@ export default class WishlistRoute extends Component<Props, {}> {
                 {this.displayLocationCheck ?
                     <LocationShare
                         selected={this.selected}
+                        close={this.toggleLocationCheck}
                     />
                     :
                     null

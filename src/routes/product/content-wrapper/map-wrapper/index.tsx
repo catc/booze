@@ -16,7 +16,7 @@ import Spinner from 'components/common/spinner/index'
 import ErrorMsg from 'components/common/error/index'
 import Map from 'components/common/map/index';
 
-const DURATION = 300;
+const DURATION = 800;
 const AnimContainer = observer(({ status, val, children, onEnter}: AnimContainer) => (
     <CSSTransition
         in={status === val}

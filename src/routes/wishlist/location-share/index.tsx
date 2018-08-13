@@ -6,10 +6,14 @@ import P from 'prop-types';
 import intersection from 'lodash/intersection'
 
 import { getStoreInventories, Store, Product } from 'api/lcbo'
+import modal from 'components/common/modal';
 
-/*@inject(stores => ({
-	session: stores.sessionStore,
-}))*/
+// TODO - write tests for the grouping logic
+
+@modal({
+    center: false,
+    autoShow: true
+})
 @observer
 export default class LocationCheck extends Component<Props, {}> {
     constructor(props: Props) {
@@ -17,6 +21,9 @@ export default class LocationCheck extends Component<Props, {}> {
 
         this.fetch()
     }
+
+    @observable status = 'searching';
+    @observable groupList = [];
 
     fetch = async () => {
         // get ids of selected products
@@ -38,122 +45,161 @@ export default class LocationCheck extends Component<Props, {}> {
         }
     }
 
-    // storeMap: { [storeID: string]: Store } = {}
-
-    // check which stores have at least 2+ of the products selected
-    analyse(hash: { [id: string]: Store[] }){
-        // map of store ids to store
-        // const storeMap: {[storeID: string]: Store} = {}
-        const productIDs = Object.keys(hash)
-        
-        // convert each array of stores to set of store ids
-        type productIDsToStoreIDsSet = {[productID: string]: Set<number>};
-        const productToStoreIDs: productIDsToStoreIDsSet = productIDs.reduce((obj, productID) => {
-            const stores = hash[productID]
-            // cache store in map
-            const storeIDs = stores.map((s: Store) => s.id)
-            /* const storeIDs = stores.map((s: Store) => {
-                // storeMap[s.id] = s
-                return s.id
-            }) */
-            obj[productID] = new Set(storeIDs)
-            return obj
-        }, {})
-        // this.storeMap = storeMap;
-
-        const storesSearched: {[key: number]: boolean} = {}
-
-        // compare stores of all products
-        const shared = productIDs.reduce((m, productID) => {
-            const stores = productToStoreIDs[productID]
-
-            stores.forEach(storeID => {
-                if (storesSearched[storeID]) {
-                    // already accounted for store
-                    return;
-                }
-
-                // check every other set of stores to see
-                // if it contains the store id as well
-                const products = [];
-                productIDs.forEach(otherProductID => {
-                    if (otherProductID !== productID) {
-                        const otherProductStores = productToStoreIDs[otherProductID]
-                        if (otherProductStores.has(storeID)) {
-                            products.push(otherProductID)
-                        }
-                    }
-                })
-
-                // add the store to the product group
-                if (products.length){
-                    products.unshift(productID)
-
-                    const productGroupKey = products.join(',')
-                    if (!m.has(productGroupKey)) {
-                        m.set(productGroupKey, [])
-                    }
-                    m.get(productGroupKey).push(storeID)
-                }
-
-                // don't search the store again
-                storesSearched[storeID] = true;
-            })
-
-            return m
-        }, new Map())
-        /* 
-            format of `shared` is:
-            {
-                "productID,productID": [storeID, storeID],
-                "productID,productID,productID": [storeID, storeID],
-            }
-        */
-
-        this.handleShared(shared)
-    }
-
-    @computed get productMap(): {[productID: string]: Product} {
-        return this.props.selected.reduce((obj, product) => {
+    @computed get productMap(): { [productID: string]: Product } {
+        return this.props.selected.reduce((obj, product: Product) => {
             obj[product.id] = product
             return obj
         }, {})
     }
 
-    handleShared(shared: Map<string, number[]>){
-        console.log('ok shared are', shared)
+    analyse(productToStore: { [productID: number]: Store[] }){
+        const groups = this.generateGroups(productToStore)
+        console.log('groups are', groups)
 
-        const productGroups = [...shared.keys()];
+        const containsAllProducts = this.containsAllProducts(groups, this.props.selected.length)
+        if (containsAllProducts){
+            this.status = 'all'
+            console.log('contains all groups')
+            // TODO
+        } else {
+            console.log('doesnt contain all groups')
+            const groupsList = this.listGroups(groups, this.productMap)
 
-        const groups = productGroups.map(group => {
-            const productIDs = group.split(',')
-            const products = productIDs.map(productID => {
-                return this.productMap[productID]
-            }).filter(p => p)
-            return {products, stores: []}
-        })
-        this.groups = groups
+            if (!groupsList.length){
+                this.status = 'empty'
+                return
+            }
 
-        /* 
-            LEFT OFF HERE
-            - when opening map with store list, basically for every single product,
-            need to get the store quantity specific for that product
-            - need to pass in custom quantity somehow to map
-        */
+            console.log('group strings are:', groupsList)
+            this.groupList = groupsList
+            this.status = 'list'
+        }
     }
-    @observable groups = [];
+
+    containsAllProducts(groups: { [productIDs: string]: string[] }, totalProducts: number): boolean {
+        for (let groupStr in groups) {
+            if (groupStr.split(',').length === totalProducts) {
+                return true;
+            }
+        }
+        return false
+    }
+    
+    // formats groups names
+    listGroups(groups: { [productIDs: string]: string[] }, productsMap: { [productID: number]: Product }): string[][] {
+        const g = [];
+        for (let groupStr in groups) {
+            const products = groupStr.split(',').map((productID: string) => {
+                return productsMap[productID].name
+            })
+            g.push(products)
+        }
+        return g;
+    }
+
+    // check which stores have at least 2+ of the products selected
+    generateGroups(hash: { [productID: number]: Store[] }): { [productIDs: string]: string[] }{
+        const storesMap: { [storeID: number]: string[] } = {}
+
+        // get stores mapped to array of products
+        for (let productID in hash) {
+            for (let store of hash[productID]) {
+                const storeID = store.id
+                if (storesMap[storeID]) {
+                    storesMap[storeID].push(productID)
+                } else {
+                    storesMap[storeID] = [productID]
+                }
+            }
+        }
+
+        // group product ids to array of common stores
+        const groups: { [productIDs: string]: string[] } = {}
+        for (let storeID in storesMap) {
+            if (storesMap[storeID].length < 2) {
+                // only products that share at least 1 store
+                continue
+            }
+            const composite = storesMap[storeID].sort().join(',')
+            if (groups[composite]) {
+                groups[composite].push(storeID)
+            } else {
+                groups[composite] = [storeID]
+            }
+        }
+
+        return groups;
+    }
+    
+    // TODO - incorporate this and test that it works correctly
+    mapStoresToProducts(groups: { [productIDs: string]: string[] },
+        key: string,
+        productsToStore: { [productID: number]: Store[] },
+        productsMap: { [productID: number]: Product }): StoreData[] 
+    {
+        const group = groups[key]
+        const products = key.split(',')
+
+        // create map of product to store to easy lookup of quantities
+        const productToStoreMap: { [productID: string]: { [storeID: string]: Store } } = {}
+        for (let productID of products) {
+            const storeMap: { [storeID: string]: Store } = {}
+            for (let store of productsToStore[productID]) {
+                storeMap[store.id] = store
+            }
+            productToStoreMap[productID] = storeMap
+        }
+
+        /* {
+            productID: {
+                storeID: { store }
+            }
+        } */
+
+        // loop through each store, added store data and product quantities
+        return group.map(storeID => {
+            let data: StoreData = { quantities: [] }
+
+            /* 
+                TODO - change the loop, otherwise need to loop through
+                each store from each product
+            */
+            for (let productID of products) {
+                // add quantities per product per store
+                // const store = productsToStore[productID].find(s => s.id = storeID)
+                const store = productToStoreMap[productID][storeID]
+                data.quantities.push([
+                    productsMap[productID].name,
+                    store.quantity
+                ])
+
+                // add store data
+                if (!data.id) {
+                    data = Object.assign(data, store)
+                }
+            }
+            return data;
+        })
+    }
+
+    // TODO - make components for each stte
+    // TODO - add 'x' to close component
+    content(){
+        if (this.status === 'searching'){
+            return <div>searching...</div>
+        }
+        if (this.status === 'all'){
+            return <div>all products found! here is map...</div>
+        }
+    }
 
     render() {
+        // TODO - render group lists, allow for selection
+        // TODO - display map
+        // TODO - style empty ('no common stores found for all selected products')
         return (
-            <div>
-                {this.groups.map((g, i) => {
-                    return (
-                        <div key={i.toString()}>
-                            Stores that contain
-                            {g.products.map(p => p.name)}
-                        </div>
-                    )
-                })}
+            <div className="wishlist-location">
+                {this.content()}
 			</div>
         )
     }

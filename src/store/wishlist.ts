@@ -32,7 +32,7 @@ export class Wishlist {
         } else {
             this.saved = new Map()
         }
-        window.s = this.saved // FOR TESTING
+        // window.s = this.saved // FOR TESTING
     }
 
     toggle = (product: Product | TruncatedProduct) => {
@@ -42,7 +42,7 @@ export class Wishlist {
         } else {
             this.saved.set(id, Wishlist.truncateProduct(product))
         }
-        // this._save()
+        this._save()
     }
 
     static truncateProduct(p: Product): WishlistProduct {
@@ -77,7 +77,7 @@ export class Wishlist {
     }
 
     exists = (productID: number): boolean => {
-        this.saved.has(productID)
+        return this.saved.has(productID)
     }
 
     _save() {

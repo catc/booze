@@ -7,7 +7,7 @@ import debounce from 'lodash/debounce';
 
 import { Store, Product } from 'api/lcbo'
 
-function StoreItem({ store, selectStore, selectedStoreID }: StoreItemProps) {
+function StoreItem({ store, selectStore, selectedStoreID, quantityFn }: StoreItemProps) {
     const isSelected = selectedStoreID === store.id
     return (
         <li
@@ -17,7 +17,11 @@ function StoreItem({ store, selectStore, selectedStoreID }: StoreItemProps) {
         >
             <span className="store__name">{store.name}</span>
             <span className="store__city">{store.city}</span>
-            <span className="store__quantity">{store.quantity} in stock</span>
+            {quantityFn ?
+                quantityFn(store)
+                :
+                <span className="store__quantity">{store.quantity} in stock</span>
+            }
 
             {isSelected ?
                 <div className="store__additional">
@@ -39,6 +43,7 @@ interface StoreItemProps {
     store: Store;
     selectStore: (id: number) => void;
     selectedStoreID: null | number;
+    quantityFn: (item: Store) => any;
 }
 
 
@@ -96,6 +101,7 @@ export default class StoreList extends Component<Props, {}> {
                             store={s}
                             selectStore={this.props.selectStore}
                             selectedStoreID={this.props.selectedStoreID}
+                            quantityFn={this.props.quantityFn}
                         />
                     ))}
                 </ul>
@@ -112,4 +118,5 @@ export interface Props {
     stores: Store[];
     selectStore: (id: number) => void;
     selectedStoreID: null | number;
+    quantityFn: (item: Store) => any;
 }

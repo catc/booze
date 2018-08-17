@@ -1,0 +1,46 @@
+@import '~styles/common/variables';
+@import '~styles/common/mixins';
+
+.search {
+    &__spinner {
+        padding: 140px;
+    }
+    &__empty {
+        padding: 120px;
+        font-size: 1.7rem;
+        text-align: center;
+        color: $g2;
+    }
+    &__found {
+        padding: 1em 0;
+        @include mq(max, $mq_big){
+            padding-left: $mq_small-padding;
+            padding-right: $mq_small-padding;
+        }
+    }
+    &__term {
+        display: block;
+        font-size: 1.8rem;
+        color: $g2;
+        padding: 1em 0;
+        margin-left: 4px;
+    }
+    &__load-more {
+        display: block;
+        padding: 1em 0;
+        text-align: center;
+        margin-top: 2em;
+        width: 100%;
+        font-size: 1.6rem;
+        background: lighten($g6, 5%);
+        border: 1px solid darken($g6, 5%);
+        font-weight: bold;
+        color: darken($g3, 5%);
+        border-radius: 2px;
+        transition: 0.15s ease-out;
+        &:hover:not(:disabled){
+            color: $g2;
+            border-color: $g4;
+        }
+    }
+}

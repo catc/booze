@@ -2,17 +2,20 @@ import './style.scss';
 import React, { Component } from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
-import P from 'prop-types';
-import intersection from 'lodash/intersection'
 
 import { getStoreInventories, Store, Product } from 'api/lcbo'
 import modal from 'components/common/modal';
+import GroupsList from './groups';
+import Spinner from 'components/common/spinner/index'
+import { X } from 'components/icons/index'
+import Map from 'components/common/map/index';
+import { containsAllProducts, listGroups, generateGroups, mapStoresToProducts } from './logic'
 
-// TODO - write tests for the grouping logic
 
 @modal({
     center: false,
-    autoShow: true
+    autoShow: true,
+    closeOnEscape: true
 })
 @observer
 export default class LocationCheck extends Component<Props, {}> {
@@ -23,8 +26,11 @@ export default class LocationCheck extends Component<Props, {}> {
     }
 
     @observable status = 'searching';
-    @observable groupList = [];
+    productToStore: {[productID: number]: Store[]} = {};
+    groups: { [productIDs: string]: string[] } = {};
+    @observable groupList: { [groupStr: string]: string[] } = {};
 
+    // grab stores
     fetch = async () => {
         // get ids of selected products
         const reqs = this.props.selected
@@ -45,6 +51,7 @@ export default class LocationCheck extends Component<Props, {}> {
         }
     }
 
+    // map of product id to product
     @computed get productMap(): { [productID: string]: Product } {
         return this.props.selected.reduce((obj, product: Product) => {
             obj[product.id] = product
@@ -52,154 +59,90 @@ export default class LocationCheck extends Component<Props, {}> {
         }, {})
     }
 
+    // logic handling store data
     analyse(productToStore: { [productID: number]: Store[] }){
-        const groups = this.generateGroups(productToStore)
-        console.log('groups are', groups)
+        this.productToStore = productToStore
+        const groups = generateGroups(productToStore)
+        this.groups = groups;
 
-        const containsAllProducts = this.containsAllProducts(groups, this.props.selected.length)
-        if (containsAllProducts){
+        const containsAllProductsKey = containsAllProducts(groups, this.props.selected.length)
+        if (containsAllProductsKey){
+            // there are stores that contain ALL selected products
             this.status = 'all'
-            console.log('contains all groups')
-            // TODO
+            this.selectGroup(containsAllProductsKey)
         } else {
-            console.log('doesnt contain all groups')
-            const groupsList = this.listGroups(groups, this.productMap)
-
-            if (!groupsList.length){
+            // there aren't any stores that contain ALL selected products, but there
+            // might be a subset of stores
+            const groupsList = listGroups(groups, this.productMap)
+            if (!Object.keys(groupsList).length){
                 this.status = 'empty'
                 return
             }
 
-            console.log('group strings are:', groupsList)
             this.groupList = groupsList
             this.status = 'list'
         }
     }
 
-    containsAllProducts(groups: { [productIDs: string]: string[] }, totalProducts: number): boolean {
-        for (let groupStr in groups) {
-            if (groupStr.split(',').length === totalProducts) {
-                return true;
-            }
-        }
-        return false
+    // selecting a group
+    @observable selectedGroupKey: string | null = null;
+    @observable selectedStores: Store[] = [];
+    @action selectGroup = (groupKey: string) => {
+        // set group key
+        this.selectedGroupKey = groupKey;
+
+        // map product quantities to store
+        this.selectedStores = mapStoresToProducts(this.groups, groupKey, this.productToStore, this.productMap)
     }
-    
-    // formats groups names
-    listGroups(groups: { [productIDs: string]: string[] }, productsMap: { [productID: number]: Product }): string[][] {
-        const g = [];
-        for (let groupStr in groups) {
-            const products = groupStr.split(',').map((productID: string) => {
-                return productsMap[productID].name
-            })
-            g.push(products)
-        }
-        return g;
-    }
-
-    // check which stores have at least 2+ of the products selected
-    generateGroups(hash: { [productID: number]: Store[] }): { [productIDs: string]: string[] }{
-        const storesMap: { [storeID: number]: string[] } = {}
-
-        // get stores mapped to array of products
-        for (let productID in hash) {
-            for (let store of hash[productID]) {
-                const storeID = store.id
-                if (storesMap[storeID]) {
-                    storesMap[storeID].push(productID)
-                } else {
-                    storesMap[storeID] = [productID]
-                }
-            }
-        }
-
-        // group product ids to array of common stores
-        const groups: { [productIDs: string]: string[] } = {}
-        for (let storeID in storesMap) {
-            if (storesMap[storeID].length < 2) {
-                // only products that share at least 1 store
-                continue
-            }
-            const composite = storesMap[storeID].sort().join(',')
-            if (groups[composite]) {
-                groups[composite].push(storeID)
-            } else {
-                groups[composite] = [storeID]
-            }
-        }
-
-        return groups;
-    }
-    
-    // TODO - incorporate this and test that it works correctly
-    mapStoresToProducts(groups: { [productIDs: string]: string[] },
-        key: string,
-        productsToStore: { [productID: number]: Store[] },
-        productsMap: { [productID: number]: Product }): StoreData[] 
-    {
-        const group = groups[key]
-        const products = key.split(',')
-
-        // create map of product to store to easy lookup of quantities
-        const productToStoreMap: { [productID: string]: { [storeID: string]: Store } } = {}
-        for (let productID of products) {
-            const storeMap: { [storeID: string]: Store } = {}
-            for (let store of productsToStore[productID]) {
-                storeMap[store.id] = store
-            }
-            productToStoreMap[productID] = storeMap
-        }
-
-        /* {
-            productID: {
-                storeID: { store }
-            }
-        } */
-
-        // loop through each store, added store data and product quantities
-        return group.map(storeID => {
-            let data: StoreData = { quantities: [] }
-
-            /* 
-                TODO - change the loop, otherwise need to loop through
-                each store from each product
-            */
-            for (let productID of products) {
-                // add quantities per product per store
-                // const store = productsToStore[productID].find(s => s.id = storeID)
-                const store = productToStoreMap[productID][storeID]
-                data.quantities.push([
-                    productsMap[productID].name,
-                    store.quantity
-                ])
-
-                // add store data
-                if (!data.id) {
-                    data = Object.assign(data, store)
-                }
-            }
-            return data;
-        })
-    }
-
-    // TODO - make components for each stte
-    // TODO - add 'x' to close component
-    content(){
-        if (this.status === 'searching'){
-            return <div>searching...</div>
-        }
-        if (this.status === 'all'){
-            return <div>all products found! here is map...</div>
-        }
-    }
+  
 
     render() {
-        // TODO - render group lists, allow for selection
-        // TODO - display map
-        // TODO - style empty ('no common stores found for all selected products')
+        let content;
+        switch (this.status){
+            case 'all':
+                const len = this.selectedStores.length
+                content = <p className="wishlist-location__all">There {len === 1 ? 'was' : 'were'} {len} store{len === 1 ? '' : 's'} found for the products you selected</p>
+                break;
+            case 'empty':
+                content = <p className="wishlist-location__empty">There are no common stores found between the stores you selected</p>
+                break;
+            case 'list':
+                content = <GroupsList
+                    list={this.groupList}
+                    selectGroup={this.selectGroup}
+                    selected={this.selectedGroupKey}
+                />
+                break;
+            default: 
+                content = <Spinner className="wishlist-location__spinner"/>
+                break;
+        }
+        
         return (
             <div className="wishlist-location">
-                {this.content()}
+                <button className="wishlist-location__close" onClick={this.props.closeModal}><X/></button>
+                {content}
+
+                {this.selectedGroupKey ?
+                    <Map
+                        stores={this.selectedStores}
+                        quantityFn={item => (
+                            <>
+                                {item.quantities.map(q => 
+                                    <div
+                                        key={q[0]}
+                                        className="wishlist-location__quantity"
+                                    >
+                                        <span className="overflow-ellipsis">{q[0]}</span>
+                                        <span>{q[1]} in stock</span>
+                                    </div>
+                                )}
+                            </>
+                        )}
+                    />
+                    :
+                    null
+                }
 			</div>
         )
     }

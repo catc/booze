@@ -24,6 +24,7 @@ export interface OpenModalOptions {
 	contentWrapperClass?: string;
 	disableRouteChangeClose?: boolean;
 	modalDidClose?: () => void
+	closeOnEscape?: boolean;
 }
 const defaultOpenModalOptions = {
 	center: true,
@@ -69,13 +70,28 @@ export default function modalWrapper(options: OpenModalOptions = {}) {
 						}
 					})
 				}
+
+				if (options.closeOnEscape){
+					document.addEventListener('keydown', this._escapeFn, false)
+				}
 			}
+
+			_escapeFn = (e: Event) => {
+				if (e.keyCode === 27){
+					this.closeModal()
+				}
+			}
+
 			componentWillUnmount(){
 				// remove history event listener
 				this.historyListen && this.historyListen()
 
 				// remove scroll stuff
 				this._scrollTearDown()
+
+				if (options.closeOnEscape){
+					document.removeEventListener('keydown', this._escapeFn)
+				}
 			}
 
 			_scroll(){

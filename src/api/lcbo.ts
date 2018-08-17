@@ -41,6 +41,11 @@ export interface Store {
 	telephone: string;
 }
 
+export interface ProductPager {
+	next_page: undefined | number;
+	total_record_count: number;
+}
+
 const TOTAL_PRODUCT_ITEMS = 12852 // retrieved from api
 const RANDOM_PAGE_SIZE = 24
 const MAX_PRODUCT_PAGES = Math.floor(TOTAL_PRODUCT_ITEMS / RANDOM_PAGE_SIZE)
@@ -49,12 +54,13 @@ const PAGE_SIZE = 100;
 
 // const PAGE_SIZE = 15; // FOR TESTING
 
-export async function search(term: string){
+export async function search(term: string, page: number = 1){
 	const url = '/products'
 	return await lcbo.request(url, {
 		params: {
 			q: term,
-			per_page: 5,
+			per_page: 12,
+			page
 			// TODO - investigate if can see dead + discontinued stuff
 			// where: 'is_dead'
 		}

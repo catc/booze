@@ -7,8 +7,9 @@ import P from 'prop-types';
 import { Wishlist } from 'store/wishlist'
 import Item from './items/item'
 import LocationShare from './location-share/index'
-import { TruncatedProduct } from 'api/lcbo'
+import { TruncatedProduct, Product } from 'api/lcbo'
 import { wait } from '../../utils/async';
+import { clearLine } from 'readline';
 
 const FADE_DURATION = 300
 
@@ -26,44 +27,18 @@ export default class WishlistRoute extends Component<Props, {}> {
     }
 
     @computed get saved(): TruncatedProduct[] {
-        /* 
-            for some reason, the following doesn't work even though it should
-            return [...this.props.wishlist.saved.toJS()]
-            typescript error? or mobx? it works in chrome console
-        */
-    //    console.log('RECOMPUTING')
         const saved: TruncatedProduct[] = []
-        
-        /* this.props.wishlist.saved.forEach(product => saved.push(
-            observable(Object.assign({selected: false}, product)))
-        ) */
-        let i = 0;
-        this.props.wishlist.saved.forEach((product) => {
-            const obj = observable(Object.assign({
-                selected: [4, 5].includes(i) ? true : false
-            }, product))
-            saved.push(obj)
-            i++
-        })
-       /*  this.props.wishlist.saved.forEach(product => saved.push(
-            product
-        )) */
-        // window.s = saved
+        this.props.wishlist.saved.forEach(product => saved.push(product) )
         return saved
     }
     
-    @action select = (product) => {
+    @action select = (product: Product) => {
         product.selected = !product.selected
     }
 
     // remove index used by child to calculate transition delay
     @observable removeIndex: number | null = null;
 
-    /* remove = (product: TruncatedProduct) => { // TODO - remove
-        this.removeIndex = this.saved.indexOf(product)
-        this.props.wishlist.toggle(product)
-    } */
-    
     @action delete = async () => {
         const ids = this.saved.filter(p => p.selected).map(p => p.id)
         // remove index used by child to calculate transition delay
@@ -81,12 +56,11 @@ export default class WishlistRoute extends Component<Props, {}> {
         this.props.wishlist.remove(ids)
     }
 
-    @computed get selected(){
+    @computed get selected(): TruncatedProduct[] {
         return this.saved.filter(s => s.selected)
     }
 
     @observable displayLocationCheck = false;
-    // @observable displayLocationCheck = true;
     @action toggleLocationCheck = () => {
         this.displayLocationCheck = !this.displayLocationCheck;
     }

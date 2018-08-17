@@ -11,7 +11,7 @@ interface WishlistProduct extends TruncatedProduct {
 
 /* 
     TODO
-    possibly when saving, pull rehydrate localstorage data before saving
+    possibly when saving, pull/rehydrate localstorage data before saving
     in order to maintain state between tabs (otherwise will lose saved)
     if saving on multiple tabs
 */
@@ -32,7 +32,6 @@ export class Wishlist {
         } else {
             this.saved = new Map()
         }
-        // window.s = this.saved // FOR TESTING
     }
 
     toggle = (product: Product | TruncatedProduct) => {
@@ -68,7 +67,7 @@ export class Wishlist {
             newMap.delete(id)
         })
         this.saved = newMap
-        // this._save()
+        this._save()
     }
 
     clear = () => {

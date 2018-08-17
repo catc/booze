@@ -2,11 +2,101 @@
 @import '~styles/common/mixins';
 
 .wishlist-location {
-    max-width: 600px;
+    $w: 720px;
+    max-width: $w;
     margin: 2em auto;
-    @include mq(max, 600px){
+    min-height: 300px;
+    @include mq(max, $w){
         margin-left: 1em;
         margin-right: 1em;
     }
     background: white;
+    transition: height ease-out 0.3s;
+    padding: 1em;
+
+    display: flex;
+    flex-direction: column;
+    // justify-content: center;
+    overflow: hidden;
+    position: relative;
+    &__close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 10px;
+        svg {
+            fill: $g3;
+            transition: 0.15s ease-out;
+        }
+        &:hover svg {
+            fill: $g2;
+        }
+    }
+    &__spinner {
+        padding-top: 122px;
+    }
+    &__empty {
+        padding: 110px 1em 0;
+        text-align: center;
+        font-size: 1.6rem;
+    }
+    &__all {
+        padding-top: 1em;
+        font-size: 1.6rem;
+    }
+    &__quantity {
+        display: block;
+        font-size: 1.2rem;
+        color: $g2;
+        display: flex;
+        justify-content: space-between;
+        span:last-child {
+            display: inline-block;
+            margin-left: 10px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+    }
+}
+
+.wishlist-location-groups {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 1fr;
+    grid-column-gap: 8px;
+    grid-row-gap: 6px;
+    padding-bottom: 1em;
+    @include mq(max, $mq_med){
+        grid-template-columns: 400px;
+        justify-content: center;
+    }
+    @include mq(max, 510px){
+        grid-template-columns: 100%;
+        justify-content: center;
+    }
+    &__item {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border: 1px solid lighten($g6, 5%);
+        transition: 0.15s ease-out;
+        min-width: 0;
+        padding: 0.4em 1em;
+        border-radius: 2px;
+        cursor: pointer;
+        span {
+            display: block;
+            padding: 2px 0;
+        }
+        &:hover {
+            border-color: $g4;
+        }
+        &.state_selected {
+            border-color: $g2;
+        }
+    }
+    &__info {
+        padding-top: 1em;
+        font-size: 1.6rem;
+    }
 }

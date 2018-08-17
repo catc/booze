@@ -28,6 +28,12 @@ export default class ProductAvailability extends Component<Props, {}> {
         await wait(300) // for animation to finish
         this.map = await mapCache.initMap(this.mapEl)
 
+        this.initMarkers()
+
+        this.mapLoaded = true
+    }
+
+    initMarkers(){
         // TODO - improve this by only displaying markers within map viewport
         this.markers = this.props.stores.map(store => {
             const coords = {
@@ -44,15 +50,13 @@ export default class ProductAvailability extends Component<Props, {}> {
                 // animation: google.maps.Animation.DROP
             })
             marker.storeID = store.id
-            
+
             marker.addListener('click', () => {
                 this.selectStore(store.id)
             })
 
             return marker;
         })
-
-        this.mapLoaded = true
     }
 
     @observable displayStoreSection = false;
@@ -65,13 +69,16 @@ export default class ProductAvailability extends Component<Props, {}> {
         }
     }
 
-    componentWillUnmount(){
+    reset(){
         const map = this.map;
         // remove markers from map
         this.markers.forEach(m => {
             m.setMap(null);
         })
         this.markers = []
+    }
+    componentWillUnmount(){
+        this.reset()
     }
 
     @observable selectedStoreID: null | number = null;
@@ -115,6 +122,21 @@ export default class ProductAvailability extends Component<Props, {}> {
         }
     }
 
+    componentDidUpdate(prevProps: Props){
+        // if store changes
+        if (prevProps.stores !== this.props.stores){
+            // remove previous markers
+            this.reset()
+
+            // set selected store to null, close store list
+            this.displayStoreSection = false;
+            this.selectedStoreID = null;
+
+            // add new markers
+            this.initMarkers()
+        }
+    }
+
     render() {
         return (
             <div className="map-content">
@@ -145,6 +167,7 @@ export default class ProductAvailability extends Component<Props, {}> {
                             stores={this.props.stores}
                             selectStore={this.selectStore}
                             selectedStoreID={this.selectedStoreID}
+                            quantityFn={this.props.quantityFn}
                         />
                         :
                         null
@@ -161,4 +184,5 @@ ProductAvailability.propTypes = {
 
 export interface Props {
     stores: Store[];
+    quantityFn: (item: Store) => any;
 }

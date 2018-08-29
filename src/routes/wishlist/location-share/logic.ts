@@ -1,14 +1,16 @@
 
 import { Store, Product } from 'api/lcbo'
 
+export type groups = groups
+
 // check if the selected products can all be found in the same store
-export function containsAllProducts(groups: { [productIDs: string]: string[] }, totalProducts: number): string | undefined {
+export function containsAllProducts(groups: groups, totalProducts: number): string | undefined {
     return Object.keys(groups).find(groupStr => groupStr.split(',').length === totalProducts)
 }
 
 
 // converts group ids to group names for rendering
-export function listGroups(groups: { [productIDs: string]: string[] }, productsMap: { [productID: number]: Product }): { [groupStr: string]: string[] } {
+export function listGroups(groups: groups, productsMap: { [productID: number]: Product }): { [groupStr: string]: string[] } {
     const g: { [groupStr: string]: string[] } = {}
     for (let groupStr in groups) {
         const products = groupStr.split(',').map((productID: string) => {
@@ -20,7 +22,7 @@ export function listGroups(groups: { [productIDs: string]: string[] }, productsM
 }
 
 // check which stores have at least 2+ of the products selected
-export function generateGroups(hash: { [productID: number]: Store[] }): { [productIDs: string]: string[] } {
+export function generateGroups(hash: { [productID: number]: Store[] }): groups {
     const storesMap: { [storeID: number]: string[] } = {}
 
     // map of store ids to array of products
@@ -36,7 +38,7 @@ export function generateGroups(hash: { [productID: number]: Store[] }): { [produ
     }
 
     // group product ids to array of common stores
-    const groups: { [productIDs: string]: string[] } = {}
+    const groups: groups = {}
     for (let storeID in storesMap) {
         if (storesMap[storeID].length < 2) {
             // only products that share at least 1 store
@@ -53,7 +55,7 @@ export function generateGroups(hash: { [productID: number]: Store[] }): { [produ
 }
 
 export function mapStoresToProducts(
-    groups: { [productIDs: string]: string[] },
+    groups: groups,
     key: string,
     productsToStore: { [productID: number]: Store[] },
     productsMap: { [productID: number]: Product }): StoreData[]

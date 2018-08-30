@@ -1,4 +1,5 @@
 @import '~styles/common/mixins';
+@import '~styles/common/variables';
 
 @import "base/normalize";
 @import "base/global";
@@ -45,4 +46,30 @@ body {
         padding-left: $mq_small-padding - $fix;
         padding-right: $mq_small-padding - $fix;
     }
+}
+
+
+.route-transition {
+	&__wrapper {
+		position: relative;
+	}
+
+	&-enter, &-exit {
+		width: 100%;
+		position: absolute;
+		top: 0;
+	}
+	&-enter {
+		z-index: 5;
+		opacity: 0;
+	}
+	&-enter-active {
+		animation: fadeIn 0.4s $ease-out-quad both;
+	}
+	&-exit {
+		z-index: 0;
+	}
+	&-exit-active {
+		animation: fadeOut 0.25s $ease-out-quad both;
+	}
 }

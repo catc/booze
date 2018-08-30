@@ -11,6 +11,10 @@ import WishlistPage from 'routes/wishlist/index'
 import { Location, History } from 'node_modules/@types/history/index';
 import { getQueryParam, getNonProductQS, PRODUCT_QUERY_KEY } from 'utils/query-string';
 import { wait } from 'utils/async'
+import {
+    CSSTransition,
+    TransitionGroup
+} from 'react-transition-group';
 
 @observer
 export default class Routes extends Component<Props, {}> {
@@ -41,14 +45,25 @@ export default class Routes extends Component<Props, {}> {
     }
 
     render() {
+        const { location } = this.props
         return (
             <Fragment>
-                <Switch>
-                    <Route path="/" exact component={HomeRoute} />
-                    <Route path="/p/:id" component={ProductFullPage} />
-                    <Route path="/wishlist" component={WishlistPage} />
-                    <Route component={NotFound} />
-                </Switch>
+                <TransitionGroup
+                    className="container route-transition__wrapper"
+                >
+                    <CSSTransition
+                        key={location.pathname}
+                        classNames="route-transition"
+                        timeout={400}
+                    >
+                        <Switch location={location}>
+                            <Route path="/" exact component={HomeRoute} />
+                            <Route path="/p/:id" component={ProductFullPage} />
+                            <Route path="/wishlist" component={WishlistPage} />
+                            <Route component={NotFound} />
+                        </Switch>
+                    </CSSTransition>
+                </TransitionGroup>
 
                 {/* product modal view */}
                 {!this.initialLoad && this.productQS ?

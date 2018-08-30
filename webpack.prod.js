@@ -202,6 +202,9 @@ function clearAssetsDir(){
 				.forEach(filename => {
 					const filepath = resolve(OUTPUT_DIR, filename)
 					if (lstatSync(filepath).isFile()){
+						if (filename === 'favicon.ico'){
+							return
+						}
 						unlinkSync(filepath)
 					}
 				})

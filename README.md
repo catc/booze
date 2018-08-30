@@ -1,20 +1,19 @@
 # Booze
 Why recreate the LCBO website?
 1. it lacks an extremely useful feature; actually displaying store inventories on a map (instead it just provides a list of stores)
-2. add the option to save to favourites and create wishlists
-3. learn + play around with typescript
+2. add the option to save to favourites/wishlist (without having to make an account)
+	- allow for grouping of products by common store locations
+3. play around with typescript
 
-## TODO
+### Development
 
-### Features
-- search pagination
-- save/wishlist
-- style
-	- add icons
-	- make responsive
-- 404 / catch all route
+#### Running locally:
+1. `nvm use 8.9.4`
+2. `npm run dev` and navigate to `localhost:5000`
+	- may need to change lcbo api key (`api/lcbo.ts`)
 
-### Other
-- verify build scripts work
-- backend to server everything - simple node server
-- dockerize
+#### Build
+1. `npm run build`
+
+#### Tests
+1. `npm run test`

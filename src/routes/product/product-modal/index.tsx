@@ -25,7 +25,6 @@ export interface ProductModalRouteProps {
 @observer
 class ProductModalRoute extends Component<ProductModalRouteProps, {}> {
     @action back = () => {
-        
         const qs = getNonProductQS(this.props.location.search)
         this.props.history.push({
             search: qs

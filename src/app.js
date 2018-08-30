@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Provider, observer } from 'mobx-react';
-import { BrowserRouter as Router, Route, Switch, NavLink } from 'react-router-dom'
+import { HashRouter, Route, NavLink } from 'react-router-dom'
 import 'store/map';
 
 import 'styles/main.scss';
@@ -26,7 +26,7 @@ import Routes from 'routes/index';
 export default class App extends Component {
 	render(){
 		return (
-			<Router>
+			<HashRouter>
 				<Provider
 					wishlist={WishlistStore}
 					recentlyViewed={RecentlyViewed}
@@ -55,7 +55,7 @@ export default class App extends Component {
 						<ModalContainer/>
 					</Fragment>
 				</Provider>
-			</Router>
+			</HashRouter>
 		)
 	}
 }

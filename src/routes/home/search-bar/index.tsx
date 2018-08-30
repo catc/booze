@@ -49,7 +49,7 @@ class SearchBar extends Component<Props, {}> {
 
     @action search = () => {
         // check for term
-        const term = getQueryParam(location.search, SEARCH_QUERY_KEY)
+        const term = getQueryParam(SEARCH_QUERY_KEY)
 
         // update state if page was refeshed
         this.term = term || ''

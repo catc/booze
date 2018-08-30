@@ -36,7 +36,8 @@ export default class Routes extends Component<Props, {}> {
 
 
     @computed get productQS(): string | null {
-        return getQueryParam(this.props.location.search, PRODUCT_QUERY_KEY);
+        this.props.location.search
+        return getQueryParam(PRODUCT_QUERY_KEY);
     }
 
     render() {

@@ -62,7 +62,7 @@ export async function search(term: string, page: number = 1){
 			per_page: 12,
 			page
 			// TODO - investigate if can see dead + discontinued stuff
-			// where: 'is_dead'
+			// , where: 'is_dead'
 		}
 	})
 }

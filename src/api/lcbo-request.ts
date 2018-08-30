@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const ACCESS_TOKEN = 'MDo2OTkxYjdjMC0yOTI0LTExZTgtOWQ3MS0xMzdkZjA0ODQ3ZWI6cnRNRHI5ZjRoVGhscVoydmViR2IyVXhIS2xzY2RMdTdwTDZ1'
+const ACCESS_TOKEN = 'MDpjM2MzNTVjMC1hYzcxLTExZTgtODY5Zi02NzUzYmEwNWM3NTg6RkxjcjlldE9yaWIyQWg0VXVOaTJPZWk3VVgzTFdhOHhxUWZp'
 
 class LCBO_API {
 	instance = null;

@@ -4,7 +4,7 @@ import { HashRouter, Route, NavLink } from 'react-router-dom'
 import 'store/map';
 
 import 'styles/main.scss';
-import { Home, Info, Gift } from 'components/icons'
+import { Home, Github, Gift } from 'components/icons'
 
 // stores
 import WishlistStore from 'store/wishlist';
@@ -42,9 +42,9 @@ export default class App extends Component {
 								</NavLink>
 							</div>
 							<div>
-								<NavLink to="/about" className="app-nav__link" activeClassName="state_active" >
-									<Info />
-								</NavLink>
+								<a className="app-nav__link" href="https://github.com/catc/booze">
+									<Github />
+								</a>
 							</div>
 						</nav>
 

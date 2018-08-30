@@ -171,7 +171,7 @@ function copyHTML(){
 			return console.log(err);
 		}
 
-		let result = html.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
+		let result = html.replace(/<script name="bundle"[\s\S]*?>[\s\S]*?<\/script>/gi, '')
 		if (manifest.vendor){
 			result = result.replace(/<!-- VENDOR_JS -->/, createScript(manifest.vendor.js))
 		}

@@ -4,11 +4,9 @@ import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import P from 'prop-types';
 
-import {
-    CSSTransition,
-} from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 import { TweenLite } from 'gsap';
-import { Expo } from 'gsap/EasePack';
+import { Circ } from 'gsap/EasePack';
 
 import { Product } from 'api/lcbo'
 import { getStoreInventories, Store } from 'api/lcbo'
@@ -16,7 +14,7 @@ import Spinner from 'components/common/spinner/index'
 import ErrorMsg from 'components/common/error/index'
 import Map from 'components/common/map/index';
 
-const DURATION = 800;
+const DURATION = 600;
 const AnimContainer = observer(({ status, val, children, onEnter}: AnimContainer) => (
     <CSSTransition
         in={status === val}
@@ -75,7 +73,7 @@ export default class MapWrapper extends Component<Props, {}> {
         // change container update height to new element
         TweenLite.to(w, DURATION / 1000, {
             height: `${newHeight}px`,
-            ease: Expo.easeOut
+            ease: Circ.easeInOut
         });
     }
 

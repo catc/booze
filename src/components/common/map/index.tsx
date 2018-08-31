@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { observable, action, computed } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import P from 'prop-types';
-import 'gsap/ScrollToPlugin'
 import { TweenLite } from 'gsap';
 import { Expo } from 'gsap/EasePack';
 

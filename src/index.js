@@ -3,6 +3,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app';
 
+// need to do this or webpack strips it out of build
+import scrollPlugin from 'gsap/ScrollToPlugin'
+scrollPlugin
+
 // budget bluebird
 window.Promise.hash = obj => {
 	return Promise.all(Object.values(obj)).then(promises => {

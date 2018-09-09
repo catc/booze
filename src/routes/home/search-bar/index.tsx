@@ -32,7 +32,14 @@ class SearchBar extends Component<Props, {}> {
 
         // on startup, check for term in url
         this.search()
-    };
+    }
+
+    input!: HTMLInputElement;
+    componentDidMount(){
+        if (window.innerWidth > 520){
+            this.input.focus()
+        }
+    }
 
     componentWillUnmount() {
         this.unlisten()
@@ -45,6 +52,9 @@ class SearchBar extends Component<Props, {}> {
         this.props.history.push({
             search: term ? `?${SEARCH_QUERY_KEY}=${term}` : ''
         })
+
+        // hide keyboard on mobile after submitting search
+        this.input.blur()
     };
 
     @action search = () => {
@@ -68,7 +78,8 @@ class SearchBar extends Component<Props, {}> {
                     value={this.term}
                     onChange={this.updateTerm}
                     onKeyDown={this.keyDown}
-                    autoFocus={true}
+                    ref={el => this.input = el}
+                    // autoFocus={true}
                 />
 
                 <button

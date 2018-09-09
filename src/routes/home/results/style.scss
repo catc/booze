@@ -155,9 +155,9 @@
                 fill: $red1;
             }
         }
-        // &:active {
-        //     margin-top: 1px;
-        // }
+        @include mq(max, $mq_med){
+            opacity: 1;
+        }
     }
     &:hover &__wishlist {
         opacity: 1;

@@ -50,7 +50,7 @@ const TOTAL_PRODUCT_ITEMS = 12852 // retrieved from api
 const RANDOM_PAGE_SIZE = 24
 const MAX_PRODUCT_PAGES = Math.floor(TOTAL_PRODUCT_ITEMS / RANDOM_PAGE_SIZE)
 
-const PAGE_SIZE = 100;
+const PAGE_SIZE = 50;
 
 // const PAGE_SIZE = 15; // FOR TESTING
 
